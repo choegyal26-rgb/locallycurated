@@ -1,0 +1,157 @@
+import { and, arrayOverlaps, eq, gte, inArray, isNull, or, sql } from "drizzle-orm";
+import { db, events, subscribers, digestLog } from "@/lib/db";
+import { sendEmail } from "@/lib/email";
+import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
+
+const TZ = "America/Los_Angeles";
+const LOOKBACK_DAYS = 14;
+
+type EventRow = typeof events.$inferSelect;
+
+function fmt(d: Date | null) {
+  if (!d) return "Date TBA";
+  return formatInTimeZone(d, TZ, "EEE, MMM d · h:mm a zzz");
+}
+
+export function buildDigestHTML(opts: {
+  events: EventRow[];
+  topics: string[];
+  unsubscribeUrl: string;
+}) {
+  const { events: evs, topics, unsubscribeUrl } = opts;
+  const grouped = new Map<string, EventRow[]>();
+  for (const e of evs) {
+    const key = e.area ?? (e.isOnline ? "Online" : "Bay Area");
+    const arr = grouped.get(key) ?? [];
+    arr.push(e);
+    grouped.set(key, arr);
+  }
+
+  const sections = [...grouped.entries()]
+    .map(
+      ([area, list]) => `
+        <h2 style="font-size:14px;text-transform:uppercase;letter-spacing:0.05em;color:#666;margin-top:32px;margin-bottom:8px;">${escapeHtml(area)}</h2>
+        ${list
+          .map(
+            (e) => `
+              <div style="border-top:1px solid #eee;padding:16px 0;">
+                <a href="${escapeAttr(e.url)}" style="color:#1a1a1a;text-decoration:none;font-size:18px;font-weight:600;">${escapeHtml(e.title)}</a>
+                <div style="color:#666;font-size:13px;margin-top:4px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` · ${escapeHtml(e.venue)}` : ""}</div>
+                ${e.description ? `<p style="color:#444;font-size:14px;line-height:1.5;margin:8px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
+                <a href="${escapeAttr(e.url)}" style="display:inline-block;margin-top:8px;color:#d2603a;font-size:13px;font-weight:500;">Details →</a>
+              </div>`,
+          )
+          .join("")}
+      `,
+    )
+    .join("");
+
+  return `<!doctype html><html><body style="font-family:ui-sans-serif,system-ui,sans-serif;background:#fdfaf4;margin:0;padding:24px;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #eee;border-radius:16px;padding:32px;">
+    <h1 style="font-size:24px;margin:0 0 8px 0;">LocallyCurated</h1>
+    <p style="color:#666;margin:0 0 8px 0;">${evs.length} new ${evs.length === 1 ? "event" : "events"} announced in the last ${LOOKBACK_DAYS} days, matching: <em>${escapeHtml(topics.join(", "))}</em>.</p>
+    ${sections}
+    <p style="color:#999;font-size:12px;margin-top:32px;border-top:1px solid #eee;padding-top:16px;">
+      You're getting this because you subscribed to LocallyCurated.
+      <a href="${escapeAttr(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
+    </p>
+  </div></body></html>`;
+}
+
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+function escapeAttr(s: string) {
+  return escapeHtml(s);
+}
+function truncate(s: string, n: number) {
+  return s.length > n ? s.slice(0, n - 1) + "…" : s;
+}
+
+export async function sendBiweeklyDigests(opts: { dryRun?: boolean } = {}) {
+  const subs = await db
+    .select()
+    .from(subscribers)
+    .where(and(eq(subscribers.confirmed, true), isNull(subscribers.unsubscribedAt)));
+
+  const since = new Date(Date.now() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000);
+
+  const summary: {
+    email: string;
+    count: number;
+    sent: boolean;
+    error?: string;
+    id?: string;
+  }[] = [];
+
+  for (const sub of subs) {
+    const areaClause =
+      sub.areas.length > 0
+        ? or(
+            isNull(events.area),
+            inArray(events.area, sub.areas),
+            eq(events.isOnline, true),
+          )
+        : undefined;
+
+    const matched = await db
+      .select()
+      .from(events)
+      .where(
+        and(
+          eq(events.status, "approved"),
+          gte(events.discoveredAt, since),
+          // Only include events that haven't already happened (NULL startsAt allowed).
+          sql`(${events.startsAt} IS NULL OR ${events.startsAt} >= NOW())`,
+          arrayOverlaps(events.topics, sub.topics),
+          areaClause,
+        ),
+      )
+      .orderBy(events.startsAt)
+      .limit(40);
+
+    if (matched.length === 0) {
+      summary.push({ email: sub.email, count: 0, sent: false });
+      continue;
+    }
+
+    const html = buildDigestHTML({
+      events: matched,
+      topics: sub.topics,
+      unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/unsubscribe?id=${sub.id}`,
+    });
+
+    let sendInfo: { sent: boolean; error?: string; id?: string } = {
+      sent: false,
+    };
+    if (!opts.dryRun) {
+      const result = await sendEmail({
+        to: sub.email,
+        subject: `Your Bay Area picks · ${format(new Date(), "MMM d")}`,
+        html,
+      });
+      if ("sent" in result && result.sent) {
+        sendInfo = { sent: true, id: result.id };
+        await db.insert(digestLog).values({
+          subscriberId: sub.id,
+          eventCount: String(matched.length),
+        });
+      } else if ("sent" in result) {
+        sendInfo = { sent: false, error: result.error };
+      } else {
+        sendInfo = { sent: false, error: result.reason };
+      }
+    }
+    summary.push({
+      email: sub.email,
+      count: matched.length,
+      ...sendInfo,
+    });
+  }
+  return summary;
+}
