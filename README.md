@@ -1,5 +1,7 @@
 # LocallyCurated
 
+🌐 **Live at https://locallycurated.vercel.app**
+
 A biweekly Bay Area events digest. Tell us your topics + neighborhoods, we send a personalized list of newly announced concerts, food fests, meetups, art shows, and conferences. Sources: scrapers (Funcheap, Eventbrite, Ticketmaster, Luma) + organizer self-submission moderated through an admin page.
 
 ## Quickstart
