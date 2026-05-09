@@ -8,3 +8,4 @@ dist
 *.log
 .vercel
 .turbo
+.env*.local
