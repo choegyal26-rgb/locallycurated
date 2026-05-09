@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db, subscribers } from "@/lib/db";
 import { TOPIC_IDS, AREA_IDS } from "@/lib/topics";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { sendWelcome } from "@/lib/welcome";
 
 const Schema = z.object({
   email: z.string().email().toLowerCase().trim(),
@@ -30,7 +31,13 @@ export async function POST(req: Request) {
   }
   const { email, topics, areas } = parsed.data;
 
-  await db
+  const existing = await db
+    .select({ id: subscribers.id })
+    .from(subscribers)
+    .where(eq(subscribers.email, email));
+  const isNewSubscriber = existing.length === 0;
+
+  const upserted = await db
     .insert(subscribers)
     .values({ email, topics, areas })
     .onConflictDoUpdate({
@@ -40,7 +47,20 @@ export async function POST(req: Request) {
         areas,
         unsubscribedAt: sql`NULL`,
       },
-    });
+    })
+    .returning({ id: subscribers.id });
+
+  if (isNewSubscriber && upserted[0]) {
+    try {
+      const result = await sendWelcome({
+        to: email,
+        subscriberId: upserted[0].id,
+      });
+      console.log("[welcome]", email, result);
+    } catch (err) {
+      console.error("[welcome] failed", email, err);
+    }
+  }
 
   return NextResponse.redirect(new URL("/thanks", req.url), { status: 303 });
 }
