@@ -18,6 +18,25 @@ export default function Submit() {
         method="POST"
         className="rounded-2xl bg-white border border-neutral-200 p-6 sm:p-8 space-y-6 shadow-sm"
       >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="website">Leave this empty</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         <Field name="title" label="Event title" required />
         <Field
           name="url"

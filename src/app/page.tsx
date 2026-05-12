@@ -283,6 +283,25 @@ function SignupCard() {
         method="POST"
         className="mt-8 rounded-3xl bg-white border border-[var(--line)] p-6 sm:p-10 space-y-8 shadow-sm"
       >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            width: "1px",
+            height: "1px",
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="website">Leave this empty</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         <div className="grid sm:grid-cols-[1fr_auto] gap-3 items-end">
           <div className="flex-1">
             <label htmlFor="email" className="block text-sm font-medium mb-2">

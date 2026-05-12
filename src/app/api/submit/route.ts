@@ -22,6 +22,15 @@ const Schema = z.object({
 
 export async function POST(req: Request) {
   const form = await req.formData();
+
+  // Honeypot: hidden field that real users never fill.
+  if (form.get("website")) {
+    console.log("[submit] honeypot tripped");
+    return NextResponse.redirect(new URL("/submit/thanks", req.url), {
+      status: 303,
+    });
+  }
+
   const parsed = Schema.safeParse({
     title: form.get("title"),
     url: form.get("url"),
