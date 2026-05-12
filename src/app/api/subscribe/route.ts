@@ -18,6 +18,14 @@ function asArray(v: FormDataEntryValue | FormDataEntryValue[] | null) {
 
 export async function POST(req: Request) {
   const form = await req.formData();
+
+  // Honeypot: real users can't see this field; bots fill it.
+  // Silently redirect to /thanks so the bot thinks it worked and moves on.
+  if (form.get("website")) {
+    console.log("[subscribe] honeypot tripped");
+    return NextResponse.redirect(new URL("/thanks", req.url), { status: 303 });
+  }
+
   const parsed = Schema.safeParse({
     email: form.get("email"),
     topics: form.getAll("topics"),
