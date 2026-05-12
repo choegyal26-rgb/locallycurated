@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db, events } from "@/lib/db";
 import { TOPIC_IDS, AREA_IDS } from "@/lib/topics";
+import {
+  notifyAdminOfSubmission,
+  sendSubmissionReceipt,
+} from "@/lib/submission-emails";
 
 const Schema = z.object({
   title: z.string().min(3).max(200),
@@ -38,20 +42,45 @@ export async function POST(req: Request) {
   }
   const v = parsed.data;
 
-  await db.insert(events).values({
-    title: v.title,
-    url: v.url,
-    venue: v.venue ?? null,
-    description: v.description ?? null,
-    startsAt: new Date(v.startsAt),
-    endsAt: v.endsAt ? new Date(v.endsAt) : null,
-    topics: v.topics,
-    area: v.area ?? null,
-    isOnline: v.isOnline,
-    source: "submission",
-    status: "pending",
-    submitterEmail: v.submitterEmail,
-  });
+  const inserted = await db
+    .insert(events)
+    .values({
+      title: v.title,
+      url: v.url,
+      venue: v.venue ?? null,
+      description: v.description ?? null,
+      startsAt: new Date(v.startsAt),
+      endsAt: v.endsAt ? new Date(v.endsAt) : null,
+      topics: v.topics,
+      area: v.area ?? null,
+      isOnline: v.isOnline,
+      source: "submission",
+      status: "pending",
+      submitterEmail: v.submitterEmail,
+    })
+    .returning();
+
+  const row = inserted[0];
+  if (row) {
+    const payload = {
+      id: row.id,
+      title: row.title,
+      url: row.url,
+      venue: row.venue,
+      description: row.description,
+      startsAt: row.startsAt,
+      endsAt: row.endsAt,
+      topics: row.topics,
+      area: row.area,
+      isOnline: row.isOnline,
+      submitterEmail: v.submitterEmail,
+    };
+    const [adminResult, submitterResult] = await Promise.all([
+      notifyAdminOfSubmission(payload).catch((e) => ({ sent: false as const, error: String(e) })),
+      sendSubmissionReceipt(payload).catch((e) => ({ sent: false as const, error: String(e) })),
+    ]);
+    console.log("[submission] admin:", adminResult, "submitter:", submitterResult);
+  }
 
   return NextResponse.redirect(new URL("/submit/thanks", req.url), {
     status: 303,
