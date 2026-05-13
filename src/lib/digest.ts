@@ -33,15 +33,23 @@ export function buildDigestHTML(opts: {
       ([area, list]) => `
         <h2 style="font-size:14px;text-transform:uppercase;letter-spacing:0.05em;color:#666;margin-top:32px;margin-bottom:8px;">${escapeHtml(area)}</h2>
         ${list
-          .map(
-            (e) => `
+          .map((e) => {
+            const calUrl = buildGoogleCalendarUrl(e);
+            return `
               <div style="border-top:1px solid #eee;padding:16px 0;">
                 <a href="${escapeAttr(e.url)}" style="color:#1a1a1a;text-decoration:none;font-size:18px;font-weight:600;">${escapeHtml(e.title)}</a>
                 <div style="color:#666;font-size:13px;margin-top:4px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` · ${escapeHtml(e.venue)}` : ""}</div>
                 ${e.description ? `<p style="color:#444;font-size:14px;line-height:1.5;margin:8px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
-                <a href="${escapeAttr(e.url)}" style="display:inline-block;margin-top:8px;color:#d2603a;font-size:13px;font-weight:500;">Details →</a>
-              </div>`,
-          )
+                <div style="margin-top:8px;">
+                  <a href="${escapeAttr(e.url)}" style="display:inline-block;color:#d2603a;font-size:13px;font-weight:500;margin-right:16px;">Details →</a>
+                  ${
+                    calUrl
+                      ? `<a href="${escapeAttr(calUrl)}" style="display:inline-block;color:#1a73e8;font-size:13px;font-weight:500;">Add to Google Calendar</a>`
+                      : ""
+                  }
+                </div>
+              </div>`;
+          })
           .join("")}
       `,
     )
@@ -57,6 +65,53 @@ export function buildDigestHTML(opts: {
       <a href="${escapeAttr(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
     </p>
   </div></body></html>`;
+}
+
+/**
+ * Build an "Add to Google Calendar" URL with LocallyCurated branding
+ * baked into the title and description so subscribers see the brand
+ * every time they look at their calendar.
+ *
+ * Returns null when the event has no start date (can't create a cal entry).
+ */
+function buildGoogleCalendarUrl(e: EventRow): string | null {
+  if (!e.startsAt) return null;
+  const SITE_URL =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co";
+
+  const fmtCal = (d: Date): string =>
+    // Google Calendar wants UTC in YYYYMMDDTHHmmssZ format.
+    d
+      .toISOString()
+      .replace(/[-:]/g, "")
+      .replace(/\.\d{3}/, "");
+
+  const start = fmtCal(e.startsAt);
+  // If no end time, default to 2 hours after start — a reasonable guess.
+  const end = fmtCal(e.endsAt ?? new Date(e.startsAt.getTime() + 2 * 60 * 60 * 1000));
+
+  const title = `${e.title} · via LocallyCurated`;
+  const detailLines = [
+    e.description ? truncate(e.description, 400) : "",
+    "",
+    `Event link: ${e.url}`,
+    "",
+    `Discovered through LocallyCurated — biweekly Bay Area events digest.`,
+    SITE_URL,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const location = e.venue ?? (e.isOnline ? "Online" : e.area ?? "Bay Area");
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: title,
+    dates: `${start}/${end}`,
+    details: detailLines,
+    location,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
 function escapeHtml(s: string) {
