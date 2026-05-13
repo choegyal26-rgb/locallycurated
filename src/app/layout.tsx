@@ -2,10 +2,53 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co";
+
 export const metadata: Metadata = {
-  title: "LocallyCurated — Bay Area events, biweekly",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "LocallyCurated — Bay Area events, biweekly",
+    template: "%s · LocallyCurated",
+  },
   description:
     "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+  keywords: [
+    "Bay Area events",
+    "San Francisco events",
+    "Oakland events",
+    "Berkeley events",
+    "SF concerts",
+    "Bay Area newsletter",
+    "events newsletter",
+    "Bay Area things to do",
+  ],
+  authors: [{ name: "LocallyCurated" }],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: "LocallyCurated",
+    title: "LocallyCurated — Bay Area events, biweekly",
+    description:
+      "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LocallyCurated — Bay Area events, biweekly",
+    description:
+      "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -13,9 +56,27 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "LocallyCurated",
+    url: SITE_URL,
+    description:
+      "Biweekly digest of newly announced Bay Area events: concerts, food fests, art shows, meetups, and more.",
+    areaServed: {
+      "@type": "Place",
+      name: "San Francisco Bay Area",
+    },
+    sameAs: [],
+  };
+
   return (
     <html lang="en">
       <body className="min-h-screen antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <header className="mx-auto max-w-5xl px-6 pt-8 pb-2 flex items-baseline justify-between">
           <Link
             href="/"
