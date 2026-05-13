@@ -232,7 +232,7 @@ function SamplePreview() {
           <span>Issue №14 · Bay Area</span>
           <span>Sun, Jun 8 · 9:00 AM</span>
         </div>
-        <h3 className="serif text-3xl mt-6">12 newly announced events for you</h3>
+        <h3 className="serif text-3xl mt-6">Newly announced events for you</h3>
         <p className="mt-2 text-[var(--ink-soft)]">
           Filtered to <em>Music · Food · Tech</em> across SF, East Bay, South Bay.
         </p>
