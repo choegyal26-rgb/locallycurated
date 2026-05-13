@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import { TOPICS, AREAS } from "@/lib/topics";
+
+export const metadata: Metadata = {
+  title: "Submit an event",
+  description:
+    "Got a Bay Area event others would miss? Submit it for review and we'll consider it for our next biweekly digest.",
+  alternates: { canonical: "/submit" },
+};
 
 export default function Submit() {
   return (
