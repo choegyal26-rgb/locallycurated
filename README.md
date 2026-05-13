@@ -1,6 +1,6 @@
 # LocallyCurated
 
-🌐 **Live at https://locallycurated.vercel.app**
+🌐 **Live at https://locallycurated.co**
 
 A biweekly Bay Area events digest. Tell us your topics + neighborhoods, we send a personalized list of newly announced concerts, food fests, meetups, art shows, and conferences. Sources: scrapers (Funcheap, Eventbrite, Ticketmaster, Luma) + organizer self-submission moderated through an admin page.
 
@@ -91,6 +91,6 @@ Edit [`src/lib/topics.ts`](src/lib/topics.ts) to add categories or Bay Area regi
 ## Deploying to Vercel
 
 1. `vercel link`
-2. Add env vars: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `ADMIN_PASSWORD`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`
+2. Add env vars: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `RESEND_WEBHOOK_SECRET`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`
 3. `vercel --prod`
 4. Cron jobs auto-register from `vercel.json`
