@@ -9,11 +9,13 @@ type Props = {
 };
 
 const SF_BOUNDS = L.latLngBounds([37.706, -122.52], [37.82, -122.345]);
+const VISIBLE_AT_ONCE = 3;
+const ROTATE_MS = 2200; // a pin holds for ~2.2s before being swapped
+const FADE_MS = 450;    // fade in/out transition duration
 
 export default function PosterMap({ pins }: Props) {
   const mapEl = useRef<HTMLDivElement>(null);
   const pinsRoot = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<L.Map | null>(null);
 
   useEffect(() => {
     if (!mapEl.current) return;
@@ -37,80 +39,101 @@ export default function PosterMap({ pins }: Props) {
       minZoom: 11,
     }).addTo(map);
 
-    mapRef.current = map;
-
-    function placePins() {
+    /** Build pin DOM nodes once; we never re-create, just toggle opacity. */
+    function renderAll() {
       const root = pinsRoot.current;
       if (!root) return;
       root.innerHTML = "";
       const size = map.getSize();
-      pins.forEach((e) => {
+      pins.forEach((e, idx) => {
         const p = map.latLngToContainerPoint([e.lat, e.lng]);
         const side = p.x > size.x * 0.55 ? "l" : "r";
         const el = document.createElement("div");
         el.className = "pin " + side;
-        el.dataset.side = side;
+        el.dataset.idx = String(idx);
         el.style.left = p.x + "px";
         el.style.top = p.y + "px";
+        el.style.opacity = "0";
+        el.style.transition = `opacity ${FADE_MS}ms ease`;
         el.innerHTML = `
           <span class="dot"></span>
           <span class="lead"></span>
           <span class="lbl">
             <span class="meta">${escapeHtml(e.meta)}</span>
             <span class="title">${escapeHtml(e.title)}</span>
-            <span class="sub">${escapeHtml(e.sub)}</span>
           </span>`;
         root.appendChild(el);
       });
-
-      // collision resolution: push overlapping labels downward
-      const pinEls = [...root.children].sort((a, b) => {
-        const aRect = (a as HTMLElement).querySelector(".lbl")!.getBoundingClientRect();
-        const bRect = (b as HTMLElement).querySelector(".lbl")!.getBoundingClientRect();
-        return aRect.top - bRect.top;
-      });
-      const placed: Array<{ top: number; bottom: number; left: number; right: number }> = [];
-      pinEls.forEach((node) => {
-        const el = node as HTMLElement;
-        const r = el.querySelector(".lbl")!.getBoundingClientRect();
-        const pad = 6;
-        let dy = 0;
-        while (dy < 180) {
-          const test = {
-            top: r.top + dy - pad,
-            bottom: r.bottom + dy + pad,
-            left: r.left - pad,
-            right: r.right + pad,
-          };
-          const hit = placed.some(
-            (p) =>
-              !(test.right < p.left || test.left > p.right || test.bottom < p.top || test.top > p.bottom),
-          );
-          if (!hit) break;
-          dy += 4;
-        }
-        if (dy > 0) {
-          const isL = el.dataset.side === "l";
-          const x = isL ? "calc(-100% + 5px)" : "-5px";
-          el.style.transform = `translate(${x}, ${-5 + dy}px)`;
-        }
-        placed.push({ top: r.top + dy, bottom: r.bottom + dy, left: r.left, right: r.right });
-      });
     }
 
-    map.whenReady(placePins);
-    map.on("resize moveend zoomend", placePins);
-    const onResize = () => {
+    /** Pick a fresh index that's not in the active set right now. */
+    function pickNext(active: Set<number>): number {
+      const candidates = pins.map((_, i) => i).filter((i) => !active.has(i));
+      if (candidates.length === 0) return -1;
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+    /** Set opacity of pin by index. */
+    function setVisible(idx: number, visible: boolean) {
+      const root = pinsRoot.current;
+      if (!root) return;
+      const el = root.querySelector<HTMLElement>(`[data-idx="${idx}"]`);
+      if (el) el.style.opacity = visible ? "1" : "0";
+    }
+
+    let active: number[] = [];
+    let cycle: ReturnType<typeof setInterval> | null = null;
+
+    function startCycle() {
+      if (pins.length === 0) return;
+      // Initial fill: pick up to VISIBLE_AT_ONCE distinct random indices
+      active = [];
+      const initialSet = new Set<number>();
+      while (active.length < Math.min(VISIBLE_AT_ONCE, pins.length)) {
+        const next = pickNext(initialSet);
+        if (next < 0) break;
+        initialSet.add(next);
+        active.push(next);
+      }
+      // Reveal them
+      active.forEach((i) => setVisible(i, true));
+
+      // Now cycle: every ROTATE_MS, swap the oldest one for a fresh random one
+      cycle = setInterval(() => {
+        if (pins.length <= VISIBLE_AT_ONCE) return; // nothing to rotate to
+        const outgoing = active.shift();
+        if (outgoing !== undefined) setVisible(outgoing, false);
+        // After the fade-out completes, swap in a new one
+        setTimeout(() => {
+          const incoming = pickNext(new Set(active));
+          if (incoming < 0) return;
+          active.push(incoming);
+          setVisible(incoming, true);
+        }, FADE_MS);
+      }, ROTATE_MS);
+    }
+
+    function onResize() {
       map.invalidateSize();
       map.fitBounds(SF_BOUNDS, { padding: [0, 0], animate: false });
-      setTimeout(placePins, 50);
-    };
+      // Re-render positions; active set continues
+      const prevActive = [...active];
+      renderAll();
+      // Restore visibility of the active ones after re-render
+      prevActive.forEach((i) => setVisible(i, true));
+    }
+
+    map.whenReady(() => {
+      renderAll();
+      startCycle();
+    });
+    map.on("resize moveend zoomend", onResize);
     window.addEventListener("resize", onResize);
 
     return () => {
       window.removeEventListener("resize", onResize);
+      if (cycle) clearInterval(cycle);
       map.remove();
-      mapRef.current = null;
     };
   }, [pins]);
 
