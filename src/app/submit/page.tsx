@@ -1,23 +1,39 @@
 import type { Metadata } from "next";
 import { TOPICS, AREAS } from "@/lib/topics";
+import { SiteBar, SiteFooter } from "@/components/SiteBar";
+import {
+  currentIssueNumber,
+  nextDispatchDate,
+  formatDispatchDate,
+} from "@/lib/issue";
 
 export const metadata: Metadata = {
   title: "Submit an event",
   description:
-    "Got a Bay Area event others would miss? Submit it for review and we'll consider it for our next biweekly digest.",
+    "Got a Bay Area event others would miss? Submit it for review and we'll consider it for our next biweekly dispatch.",
   alternates: { canonical: "/submit" },
 };
 
 export default function Submit() {
   return (
-    <div className="mx-auto max-w-3xl px-6 pb-16">
-      <section className="pt-6 pb-8">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Submit an event
+    <main className="frame">
+      <SiteBar
+        issue={{
+          primary: `Issue № ${currentIssueNumber()}`,
+          secondary: formatDispatchDate(nextDispatchDate()),
+        }}
+        variant="home"
+      />
+      <section className="pref-masthead" style={{ padding: "60px 0 30px" }}>
+        <p className="pref-crumb">
+          <span className="dash"></span>FOR ORGANIZERS
+        </p>
+        <h1>
+          Submit an <em>event</em>.
         </h1>
-        <p className="mt-3 text-neutral-700 max-w-xl">
+        <p className="deck">
           Got an event others would miss? Drop the link below. Submissions are
-          reviewed before they go in the next digest.
+          reviewed within 48 hours before they go in the next dispatch.
         </p>
       </section>
 
@@ -117,7 +133,8 @@ export default function Submit() {
           Submit for review
         </button>
       </form>
-    </div>
+      <SiteFooter />
+    </main>
   );
 }
 
