@@ -14,7 +14,9 @@ export default async function Home() {
   const issueNo = currentIssueNumber();
   const dispatch = nextDispatchDate();
   const dispatchLabel = formatDispatchDate(dispatch);
-  const pins = await getMapPins(6);
+  // Pull a pool of 15 events; the map cycles through them in a live ticker
+  // (3 visible at once, swap every couple seconds).
+  const pins = await getMapPins(15);
 
   return (
     <main className="frame">
@@ -59,8 +61,8 @@ export default async function Home() {
           <i>this week&apos;s lineup</i>
         </div>
         <div className="corner tr">
-          <b>{pins.length} EVENTS · JUST ANNOUNCED</b>
-          <i>all upcoming, none past</i>
+          <b>LIVE · JUST ANNOUNCED</b>
+          <i>{pins.length} this week</i>
         </div>
         <div className="corner br">
           <b>NEXT DISPATCH · {dispatchLabel.toUpperCase()}</b>
