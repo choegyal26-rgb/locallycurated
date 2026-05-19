@@ -14,7 +14,7 @@ export default async function Home() {
   const issueNo = currentIssueNumber();
   const dispatch = nextDispatchDate();
   const dispatchLabel = formatDispatchDate(dispatch);
-  const pins = await getMapPins(10);
+  const pins = await getMapPins(6);
 
   return (
     <main className="frame">
