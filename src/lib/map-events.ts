@@ -41,13 +41,14 @@ export async function getMapPins(limit = 8): Promise<MapPin[]> {
     .orderBy(desc(events.discoveredAt))
     .limit(60); // fetch more, filter to ones with coord matches
 
-  // Dedupe: at most one pin per venue (keep most-recently-announced).
-  // Multiple shows at the same address create overlapping pins that
-  // tangle the label collision resolution.
+  // Dedupe: at most one pin per venue. Multiple shows at the same
+  // address would stack on top of each other.
   const seenVenues = new Set<string>();
   const pins: MapPin[] = [];
   for (const r of rows) {
-    const coords = findVenueCoords(r.venue);
+    // Use title+venue as the jitter seed so neighborhood-fallback pins
+    // for different events spread out instead of stacking.
+    const coords = findVenueCoords(r.venue, `${r.title}|${r.venue ?? ""}`);
     if (!coords) continue;
     const venueKey = (r.venue ?? "").toLowerCase().trim();
     if (seenVenues.has(venueKey)) continue;
