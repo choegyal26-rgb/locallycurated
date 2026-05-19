@@ -1,17 +1,37 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Fraunces, Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "LocallyCurated — Bay Area events, biweekly",
+    default: "LocallyCurated — A Bay Area Field Guide",
     template: "%s · LocallyCurated",
   },
   description:
-    "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+    "A biweekly dispatch of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
   keywords: [
     "Bay Area events",
     "San Francisco events",
@@ -28,16 +48,16 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "LocallyCurated",
-    title: "LocallyCurated — Bay Area events, biweekly",
+    title: "LocallyCurated — A Bay Area Field Guide",
     description:
-      "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+      "A biweekly dispatch of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LocallyCurated — Bay Area events, biweekly",
+    title: "LocallyCurated — A Bay Area Field Guide",
     description:
-      "A biweekly digest of newly announced Bay Area concerts, food fests, art shows, meetups, and more.",
+      "A biweekly dispatch of newly announced Bay Area events.",
   },
   robots: {
     index: true,
@@ -62,7 +82,7 @@ export default function RootLayout({
     name: "LocallyCurated",
     url: SITE_URL,
     description:
-      "Biweekly digest of newly announced Bay Area events: concerts, food fests, art shows, meetups, and more.",
+      "Biweekly dispatch of newly announced Bay Area events: concerts, food fests, art shows, meetups, and more.",
     areaServed: {
       "@type": "Place",
       name: "San Francisco Bay Area",
@@ -71,46 +91,16 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
-      <body className="min-h-screen antialiased">
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${archivo.variable} ${mono.variable}`}
+    >
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <header className="mx-auto max-w-5xl px-6 pt-8 pb-2 flex items-baseline justify-between">
-          <Link
-            href="/"
-            className="text-lg font-semibold tracking-tight flex items-center gap-2"
-          >
-            <span
-              aria-hidden
-              className="inline-block w-2.5 h-2.5 rounded-full bg-[var(--accent)]"
-            />
-            LocallyCurated
-          </Link>
-          <nav className="text-sm text-neutral-600 flex gap-5">
-            <Link href="/#how" className="hover:text-[var(--accent)]">
-              How it works
-            </Link>
-            <Link href="/submit" className="hover:text-[var(--accent)]">
-              Submit an event
-            </Link>
-          </nav>
-        </header>
-        <main>{children}</main>
-        <footer className="mx-auto max-w-5xl px-6 py-12 mt-12 border-t border-[var(--line)] text-xs text-neutral-500 flex flex-wrap justify-between gap-3">
-          <span>
-            © {new Date().getFullYear()} LocallyCurated · Made for the Bay
-          </span>
-          <span className="flex gap-4">
-            <Link href="/submit" className="hover:text-[var(--ink)]">
-              For organizers
-            </Link>
-            <a href="mailto:hello@locallycurated.co" className="hover:text-[var(--ink)]">
-              Contact
-            </a>
-          </span>
-        </footer>
+        {children}
       </body>
     </html>
   );

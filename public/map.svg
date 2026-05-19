@@ -1,0 +1,399 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" id="bay-map" font-family="&#39;Fraunces&#39;,Georgia,serif">
+<defs>
+  <clipPath id="sf-land">
+    <path d="M 240 60 C 320 56 420 60 520 70 C 580 78 620 100 642 138 C 660 180 668 230 670 280 C 672 340 666 400 660 470 C 656 540 660 610 666 680 C 672 760 686 840 700 920 C 712 990 716 1060 712 1120 C 708 1180 696 1230 670 1268 C 630 1296 570 1310 500 1316 C 410 1320 320 1316 240 1300 C 180 1284 140 1252 120 1200 C 100 1140 92 1060 90 970 C 90 870 96 760 110 660 C 124 560 142 470 158 380 C 174 300 192 220 210 150 C 220 110 228 80 240 60 Z"></path>
+  </clipPath>
+  <clipPath id="east-land">
+    <path d="M 880 60 L 1180 60 L 1180 1300 L 1100 1340 C 1020 1340 970 1320 940 1280 C 910 1220 890 1140 880 1060 C 872 970 870 870 880 770 C 890 670 906 570 920 470 C 932 380 940 290 940 200 C 938 140 928 90 920 60 Z"></path>
+  </clipPath>
+</defs>
+
+<g>
+  <path d="M 240 60 C 320 56 420 60 520 70 C 580 78 620 100 642 138 C 660 180 668 230 670 280 C 672 340 666 400 660 470 C 656 540 660 610 666 680 C 672 760 686 840 700 920 C 712 990 716 1060 712 1120 C 708 1180 696 1230 670 1268 C 630 1296 570 1310 500 1316 C 410 1320 320 1316 240 1300 C 180 1284 140 1252 120 1200 C 100 1140 92 1060 90 970 C 90 870 96 760 110 660 C 124 560 142 470 158 380 C 174 300 192 220 210 150 C 220 110 228 80 240 60 Z" fill="#1A1F24"></path>
+  <path d="M 880 60 L 1180 60 L 1180 1300 L 1100 1340 C 1020 1340 970 1320 940 1280 C 910 1220 890 1140 880 1060 C 872 970 870 870 880 770 C 890 670 906 570 920 470 C 932 380 940 290 940 200 C 938 140 928 90 920 60 Z" fill="#1A1F24"></path>
+</g>
+
+<g clip-path="url(#sf-land)" stroke="#F1E9D6" fill="none" stroke-linecap="round">
+  <path d="M 240 60 C 320 56 420 60 520 70 C 580 78 620 100 642 138 C 660 180 668 230 670 280 C 672 340 666 400 660 470 C 656 540 660 610 666 680 C 672 760 686 840 700 920 C 712 990 716 1060 712 1120 C 708 1180 696 1230 670 1268 C 630 1296 570 1310 500 1316 C 410 1320 320 1316 240 1300 C 180 1284 140 1252 120 1200 C 100 1140 92 1060 90 970 C 90 870 96 760 110 660 C 124 560 142 470 158 380 C 174 300 192 220 210 150 C 220 110 228 80 240 60 Z" stroke-width="1.4"></path>
+
+  <g stroke-width="0.55" opacity="0.95">
+    <line x1="110" y1="200" x2="148" y2="1280"></line>
+    <line x1="130" y1="200" x2="168" y2="1280"></line>
+    <line x1="150" y1="200" x2="188" y2="1280"></line>
+    <line x1="170" y1="200" x2="208" y2="1280"></line>
+    <line x1="190" y1="200" x2="228" y2="1280"></line>
+    <line x1="210" y1="200" x2="248" y2="1280"></line>
+    <line x1="230" y1="200" x2="268" y2="1280"></line>
+    <line x1="250" y1="200" x2="288" y2="1280"></line>
+    <line x1="270" y1="200" x2="308" y2="1280"></line>
+    <line x1="290" y1="200" x2="328" y2="1280"></line>
+    <line x1="310" y1="200" x2="348" y2="1280"></line>
+    <line x1="330" y1="200" x2="368" y2="1280"></line>
+    <line x1="350" y1="200" x2="388" y2="1280"></line>
+  </g>
+  <g stroke-width="0.5" opacity="0.9">
+    <line x1="100" y1="240" x2="650" y2="240"></line>
+    <line x1="100" y1="260" x2="650" y2="260"></line>
+    <line x1="100" y1="280" x2="650" y2="280"></line>
+    <line x1="100" y1="300" x2="650" y2="300"></line>
+    <line x1="100" y1="320" x2="650" y2="320"></line>
+    <line x1="100" y1="340" x2="650" y2="340"></line>
+    <line x1="100" y1="360" x2="650" y2="360"></line>
+    <line x1="100" y1="380" x2="660" y2="380"></line>
+    <line x1="100" y1="400" x2="660" y2="400"></line>
+    <line x1="100" y1="420" x2="660" y2="420"></line>
+    <line x1="100" y1="440" x2="660" y2="440"></line>
+    <line x1="100" y1="460" x2="660" y2="460"></line>
+    <line x1="100" y1="480" x2="660" y2="480"></line>
+    <line x1="100" y1="500" x2="660" y2="500"></line>
+    <line x1="100" y1="520" x2="660" y2="520"></line>
+    <line x1="100" y1="540" x2="660" y2="540"></line>
+    <line x1="100" y1="640" x2="660" y2="640"></line>
+    <line x1="100" y1="660" x2="660" y2="660"></line>
+    <line x1="100" y1="680" x2="660" y2="680"></line>
+    <line x1="100" y1="700" x2="660" y2="700"></line>
+    <line x1="100" y1="720" x2="660" y2="720"></line>
+    <line x1="100" y1="740" x2="660" y2="740"></line>
+    <line x1="100" y1="760" x2="660" y2="760"></line>
+    <line x1="100" y1="780" x2="660" y2="780"></line>
+    <line x1="100" y1="800" x2="660" y2="800"></line>
+    <line x1="100" y1="820" x2="660" y2="820"></line>
+    <line x1="100" y1="840" x2="660" y2="840"></line>
+    <line x1="100" y1="860" x2="660" y2="860"></line>
+    <line x1="100" y1="880" x2="660" y2="880"></line>
+    <line x1="100" y1="900" x2="660" y2="900"></line>
+    <line x1="100" y1="920" x2="660" y2="920"></line>
+    <line x1="100" y1="940" x2="660" y2="940"></line>
+    <line x1="100" y1="960" x2="660" y2="960"></line>
+    <line x1="100" y1="980" x2="660" y2="980"></line>
+    <line x1="100" y1="1000" x2="660" y2="1000"></line>
+    <line x1="100" y1="1020" x2="660" y2="1020"></line>
+    <line x1="100" y1="1040" x2="660" y2="1040"></line>
+    <line x1="100" y1="1060" x2="660" y2="1060"></line>
+    <line x1="100" y1="1080" x2="660" y2="1080"></line>
+    <line x1="100" y1="1100" x2="660" y2="1100"></line>
+    <line x1="100" y1="1120" x2="660" y2="1120"></line>
+    <line x1="100" y1="1140" x2="660" y2="1140"></line>
+    <line x1="100" y1="1160" x2="660" y2="1160"></line>
+    <line x1="100" y1="1180" x2="660" y2="1180"></line>
+    <line x1="100" y1="1200" x2="660" y2="1200"></line>
+    <line x1="100" y1="1220" x2="660" y2="1220"></line>
+    <line x1="100" y1="1240" x2="660" y2="1240"></line>
+    <line x1="100" y1="1260" x2="660" y2="1260"></line>
+    <line x1="100" y1="1280" x2="660" y2="1280"></line>
+    <line x1="100" y1="1300" x2="660" y2="1300"></line>
+  </g>
+
+  <path d="M 200 1280 L 660 600" stroke-width="1.6"></path>
+  <path d="M 204 1284 L 664 604" stroke-width="0.8" opacity="0.6"></path>
+  <path d="M 220 1280 L 600 700" stroke-width="0.7" opacity="0.7"></path>
+
+  <path d="M 658 600 C 670 720 680 850 690 980 C 698 1100 700 1200 700 1260" stroke-width="1.4"></path>
+
+  <g stroke-width="0.45" opacity="0.85">
+    <path d="M 280 720 C 320 700 360 700 400 720 C 440 740 480 740 520 720"></path>
+    <path d="M 270 740 C 310 720 360 720 410 740 C 460 760 510 760 540 740"></path>
+    <path d="M 260 760 C 300 740 360 740 420 760 C 480 780 520 780 550 760"></path>
+    <path d="M 250 780 C 290 760 360 760 430 780 C 490 800 530 800 560 780"></path>
+    <path d="M 240 800 C 290 780 360 780 440 800 C 500 820 540 820 570 800"></path>
+    <path d="M 240 820 C 300 800 380 800 460 820 C 510 840 550 840 580 820"></path>
+    <path d="M 250 840 C 320 820 400 820 470 840 C 520 860 560 860 590 840"></path>
+    <path d="M 270 860 C 340 840 410 840 470 860 C 520 880 560 880 590 860"></path>
+    <path d="M 290 880 C 360 860 420 860 470 880 C 520 900 560 900 590 880"></path>
+    <path d="M 310 900 C 380 880 430 880 470 900 C 520 920 560 920 590 900"></path>
+  </g>
+
+  <g stroke-width="0.4" opacity="0.8">
+    <ellipse cx="400" cy="810" rx="30" ry="14"></ellipse>
+    <ellipse cx="400" cy="810" rx="22" ry="10"></ellipse>
+    <ellipse cx="400" cy="810" rx="14" ry="6"></ellipse>
+    <ellipse cx="430" cy="830" rx="22" ry="9"></ellipse>
+    <ellipse cx="430" cy="830" rx="14" ry="6"></ellipse>
+  </g>
+
+  <g stroke-width="0.4" opacity="0.8">
+    <path d="M 420 460 C 480 450 540 460 600 470"></path>
+    <path d="M 420 478 C 480 468 540 478 600 488"></path>
+    <path d="M 420 496 C 480 486 540 496 600 506"></path>
+    <path d="M 420 514 C 480 504 540 514 600 524"></path>
+    <path d="M 420 532 C 480 522 540 532 600 542"></path>
+  </g>
+
+  <g stroke-width="0.42" opacity="0.85">
+    <line x1="260" y1="1240" x2="640" y2="660"></line>
+    <line x1="280" y1="1240" x2="660" y2="660"></line>
+    <line x1="300" y1="1240" x2="660" y2="680"></line>
+    <line x1="320" y1="1240" x2="660" y2="700"></line>
+    <line x1="340" y1="1240" x2="660" y2="720"></line>
+    <line x1="360" y1="1240" x2="660" y2="740"></line>
+    <line x1="380" y1="1240" x2="660" y2="760"></line>
+    <line x1="400" y1="1240" x2="660" y2="780"></line>
+    <line x1="420" y1="1240" x2="660" y2="800"></line>
+    <line x1="440" y1="1240" x2="660" y2="820"></line>
+    <line x1="460" y1="1240" x2="660" y2="840"></line>
+    <line x1="480" y1="1240" x2="660" y2="860"></line>
+    <line x1="500" y1="1240" x2="660" y2="880"></line>
+    <line x1="250" y1="1200" x2="600" y2="1380"></line>
+    <line x1="240" y1="1180" x2="600" y2="1360"></line>
+    <line x1="230" y1="1160" x2="600" y2="1340"></line>
+    <line x1="220" y1="1140" x2="600" y2="1320"></line>
+    <line x1="210" y1="1120" x2="600" y2="1300"></line>
+    <line x1="290" y1="1140" x2="620" y2="1300"></line>
+    <line x1="340" y1="1080" x2="660" y2="1240"></line>
+    <line x1="390" y1="1020" x2="680" y2="1180"></line>
+    <line x1="440" y1="960" x2="690" y2="1120"></line>
+    <line x1="490" y1="900" x2="690" y2="1060"></line>
+    <line x1="540" y1="840" x2="690" y2="1000"></line>
+    <line x1="580" y1="780" x2="690" y2="940"></line>
+  </g>
+
+  <g stroke-width="0.42" opacity="0.85">
+    <path d="M 460 220 C 520 230 580 240 640 260"></path>
+    <path d="M 460 250 C 520 260 580 270 640 290"></path>
+    <path d="M 460 280 C 520 290 580 300 640 320"></path>
+    <path d="M 460 310 C 520 320 580 330 640 350"></path>
+    <path d="M 460 340 C 520 350 580 360 640 380"></path>
+    <path d="M 460 370 C 520 380 580 390 640 410"></path>
+    <path d="M 460 400 C 520 410 580 420 640 440"></path>
+    <line x1="470" y1="220" x2="490" y2="450"></line>
+    <line x1="500" y1="220" x2="520" y2="450"></line>
+    <line x1="530" y1="220" x2="550" y2="450"></line>
+    <line x1="560" y1="220" x2="580" y2="450"></line>
+    <line x1="590" y1="220" x2="610" y2="450"></line>
+    <line x1="620" y1="240" x2="640" y2="450"></line>
+  </g>
+
+  <path d="M 196 200 L 234 1280" stroke-width="1.2"></path>
+  <path d="M 444 250 L 470 1300" stroke-width="1.2"></path>
+  <path d="M 100 470 L 660 470" stroke-width="1.1"></path>
+  <path d="M 100 560 L 660 560" stroke-width="0.9"></path>
+  <path d="M 240 1316 C 260 1240 280 1160 320 1080 C 360 1000 410 940 480 880" stroke-width="1.3"></path>
+  <path d="M 244 1320 C 264 1244 284 1164 324 1084 C 364 1004 414 944 484 884" stroke-width="0.5" opacity="0.6"></path>
+  <path d="M 590 1316 C 610 1240 630 1140 660 1020 C 685 920 700 820 700 720" stroke-width="1.3"></path>
+  <path d="M 594 1320 C 614 1244 634 1144 664 1024 C 689 924 704 824 704 724" stroke-width="0.5" opacity="0.6"></path>
+</g>
+
+<g>
+  <rect x="100" y="560" width="380" height="60" fill="#1A1F24" stroke="#F1E9D6" stroke-width="0.7"></rect>
+  <g fill="#F1E9D6" opacity="0.7">
+    <circle cx="130" cy="582" r="1.6"></circle><circle cx="148" cy="596" r="1.4"></circle><circle cx="168" cy="580" r="1.8"></circle>
+    <circle cx="190" cy="600" r="1.4"></circle><circle cx="210" cy="584" r="1.6"></circle><circle cx="230" cy="598" r="1.4"></circle>
+    <circle cx="250" cy="582" r="1.8"></circle><circle cx="270" cy="600" r="1.4"></circle><circle cx="290" cy="586" r="1.6"></circle>
+    <circle cx="310" cy="598" r="1.4"></circle><circle cx="330" cy="582" r="1.6"></circle><circle cx="350" cy="600" r="1.4"></circle>
+    <circle cx="370" cy="584" r="1.8"></circle><circle cx="390" cy="598" r="1.4"></circle><circle cx="410" cy="582" r="1.6"></circle>
+    <circle cx="430" cy="600" r="1.4"></circle><circle cx="450" cy="588" r="1.6"></circle>
+  </g>
+  <ellipse cx="270" cy="595" rx="14" ry="5" fill="none" stroke="#F1E9D6" stroke-width="0.5"></ellipse>
+  <ellipse cx="380" cy="585" rx="10" ry="4" fill="none" stroke="#F1E9D6" stroke-width="0.5"></ellipse>
+</g>
+
+<g>
+  <path d="M 90 120 C 150 110 220 116 280 140 C 280 200 250 240 200 256 C 140 256 110 220 90 180 Z" fill="#1A1F24" stroke="#F1E9D6" stroke-width="0.8"></path>
+  <g fill="#F1E9D6" opacity="0.55">
+    <circle cx="120" cy="160" r="1.4"></circle><circle cx="140" cy="180" r="1.4"></circle><circle cx="160" cy="160" r="1.4"></circle>
+    <circle cx="180" cy="180" r="1.4"></circle><circle cx="200" cy="160" r="1.4"></circle><circle cx="220" cy="180" r="1.4"></circle>
+    <circle cx="160" cy="200" r="1.4"></circle><circle cx="200" cy="200" r="1.4"></circle><circle cx="240" cy="200" r="1.4"></circle>
+    <circle cx="130" cy="220" r="1.4"></circle><circle cx="170" cy="230" r="1.4"></circle><circle cx="210" cy="225" r="1.4"></circle>
+  </g>
+</g>
+
+<g clip-path="url(#east-land)" stroke="#F1E9D6" fill="none" stroke-linecap="round">
+  <path d="M 880 60 L 1180 60 L 1180 1300 L 1100 1340 C 1020 1340 970 1320 940 1280 C 910 1220 890 1140 880 1060 C 872 970 870 870 880 770 C 890 670 906 570 920 470 C 932 380 940 290 940 200 C 938 140 928 90 920 60 Z" stroke-width="1.4"></path>
+  <path d="M 950 100 C 980 200 1000 320 1010 460 C 1018 600 1018 740 1014 880 C 1010 1020 998 1140 980 1240" stroke-width="1.2"></path>
+  <path d="M 980 100 C 1004 220 1020 360 1030 500 C 1040 660 1042 820 1036 980 C 1028 1120 1010 1240 990 1320" stroke-width="0.5" opacity="0.7"></path>
+  <g stroke-width="0.4" opacity="0.85">
+    <line x1="920" y1="150" x2="1180" y2="170"></line>
+    <line x1="918" y1="180" x2="1180" y2="200"></line>
+    <line x1="916" y1="210" x2="1180" y2="230"></line>
+    <line x1="914" y1="240" x2="1180" y2="260"></line>
+    <line x1="912" y1="270" x2="1180" y2="290"></line>
+    <line x1="910" y1="300" x2="1180" y2="320"></line>
+    <line x1="908" y1="330" x2="1180" y2="350"></line>
+    <line x1="906" y1="360" x2="1180" y2="380"></line>
+    <line x1="904" y1="390" x2="1180" y2="410"></line>
+    <line x1="902" y1="420" x2="1180" y2="440"></line>
+    <line x1="900" y1="450" x2="1180" y2="470"></line>
+    <line x1="900" y1="480" x2="1180" y2="500"></line>
+    <line x1="898" y1="510" x2="1180" y2="530"></line>
+    <line x1="896" y1="540" x2="1180" y2="560"></line>
+    <line x1="894" y1="570" x2="1180" y2="590"></line>
+    <line x1="892" y1="600" x2="1180" y2="620"></line>
+    <line x1="890" y1="630" x2="1180" y2="650"></line>
+    <line x1="890" y1="660" x2="1180" y2="680"></line>
+    <line x1="888" y1="690" x2="1180" y2="710"></line>
+    <line x1="888" y1="720" x2="1180" y2="740"></line>
+    <line x1="886" y1="750" x2="1180" y2="770"></line>
+    <line x1="886" y1="780" x2="1180" y2="800"></line>
+    <line x1="884" y1="810" x2="1180" y2="830"></line>
+    <line x1="884" y1="840" x2="1180" y2="860"></line>
+    <line x1="884" y1="870" x2="1180" y2="890"></line>
+    <line x1="884" y1="900" x2="1180" y2="920"></line>
+    <line x1="884" y1="930" x2="1180" y2="950"></line>
+    <line x1="884" y1="960" x2="1180" y2="980"></line>
+    <line x1="884" y1="990" x2="1180" y2="1010"></line>
+    <line x1="886" y1="1020" x2="1180" y2="1040"></line>
+    <line x1="886" y1="1050" x2="1180" y2="1070"></line>
+    <line x1="888" y1="1080" x2="1180" y2="1100"></line>
+    <line x1="888" y1="1110" x2="1180" y2="1130"></line>
+    <line x1="890" y1="1140" x2="1180" y2="1160"></line>
+    <line x1="892" y1="1170" x2="1180" y2="1190"></line>
+    <line x1="894" y1="1200" x2="1180" y2="1220"></line>
+    <line x1="898" y1="1230" x2="1180" y2="1250"></line>
+    <line x1="906" y1="1260" x2="1170" y2="1280"></line>
+  </g>
+  <g stroke-width="0.45" opacity="0.9">
+    <path d="M 930 80 L 970 1280"></path>
+    <path d="M 960 80 L 996 1280"></path>
+    <path d="M 1000 80 L 1024 1290"></path>
+    <path d="M 1040 80 L 1056 1290"></path>
+    <path d="M 1080 80 L 1088 1290"></path>
+    <path d="M 1120 80 L 1124 1290"></path>
+    <path d="M 1160 80 L 1160 1290"></path>
+  </g>
+  <ellipse cx="960" cy="780" rx="14" ry="20" fill="none" stroke="#F1E9D6" stroke-width="0.9"></ellipse>
+  <g stroke-width="0.4" opacity="0.7">
+    <path d="M 1100 600 C 1130 590 1160 600 1180 620"></path>
+    <path d="M 1110 620 C 1140 610 1160 620 1180 640"></path>
+    <path d="M 1120 640 C 1150 630 1170 640 1180 660"></path>
+  </g>
+</g>
+
+<g stroke="#1A1F24" fill="none">
+  <line x1="660" y1="510" x2="940" y2="540" stroke-width="2.2"></line>
+  <line x1="660" y1="518" x2="940" y2="548" stroke-width="2.2"></line>
+</g>
+<g stroke="#F1E9D6" fill="none">
+  <line x1="660" y1="513" x2="940" y2="543" stroke-width="0.6"></line>
+  <line x1="660" y1="516" x2="940" y2="546" stroke-width="0.6"></line>
+</g>
+
+<g stroke="#1A1F24" fill="none" opacity="0.18">
+  <path d="M 740 220 Q 770 212 800 220 Q 830 228 860 220"></path>
+  <path d="M 740 250 Q 770 242 800 250 Q 830 258 860 250"></path>
+  <path d="M 740 290 Q 770 282 800 290 Q 830 298 860 290"></path>
+  <path d="M 740 700 Q 770 692 800 700 Q 830 708 860 700"></path>
+  <path d="M 740 740 Q 770 732 800 740 Q 830 748 860 740"></path>
+  <path d="M 740 780 Q 770 772 800 780 Q 830 788 860 780"></path>
+  <path d="M 740 1000 Q 770 992 800 1000 Q 830 1008 860 1000"></path>
+  <path d="M 740 1040 Q 770 1032 800 1040 Q 830 1048 860 1040"></path>
+</g>
+
+<g font-family="&#39;Fraunces&#39;,Georgia,serif">
+
+  <text x="800" y="640" font-size="56" font-style="italic" fill="#1A1F24" text-anchor="middle" letter-spacing="-1">
+    <tspan x="800" dy="0">you missed it because</tspan>
+    <tspan x="800" dy="64">nobody told you.</tspan>
+  </text>
+
+  <g>
+    <line x1="760" y1="560" x2="840" y2="560" stroke="#1A1F24" stroke-width="0.6"></line>
+    <text x="800" y="544" font-size="10" font-style="italic" fill="#1A1F24" text-anchor="middle" letter-spacing="6">ISSUE №47 · JUN 22 · MMXXVI</text>
+  </g>
+
+  <text x="800" y="780" font-size="13" font-style="italic" fill="#1A1F24" text-anchor="middle" letter-spacing="0">
+    <tspan x="800" dy="0">a fortnightly dispatch of bay-area events</tspan>
+    <tspan x="800" dy="20">just announced. read in three minutes.</tspan>
+  </text>
+
+  <g>
+    <circle cx="220" cy="370" r="3" fill="#E94B1F"></circle>
+    <line x1="220" y1="370" x2="80" y2="340" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="78" y="332" text-anchor="end" font-size="10" font-style="italic" fill="#1A1F24">richmond · 6/22</text>
+    <text x="78" y="346" text-anchor="end" font-size="13" fill="#1A1F24" font-weight="600">Sunday matinee at Balboa</text>
+    <text x="78" y="360" text-anchor="end" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">double feature · Cassavetes</text>
+  </g>
+
+  <g>
+    <circle cx="180" cy="780" r="3" fill="#E94B1F"></circle>
+    <line x1="180" y1="780" x2="78" y2="820" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="78" y="812" text-anchor="end" font-size="10" font-style="italic" fill="#1A1F24">outer sunset · 6/14</text>
+    <text x="78" y="826" text-anchor="end" font-size="13" fill="#1A1F24" font-weight="600">Outerlands fog supper</text>
+    <text x="78" y="840" text-anchor="end" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">7 pm · tickets via newsletter only</text>
+  </g>
+
+  <g>
+    <circle cx="500" cy="1050" r="3" fill="#E94B1F"></circle>
+    <line x1="500" y1="1050" x2="78" y2="1100" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="78" y="1092" text-anchor="end" font-size="10" font-style="italic" fill="#1A1F24">mission · wed 6/11</text>
+    <text x="78" y="1106" text-anchor="end" font-size="13" fill="#1A1F24" font-weight="600">Comedy Co-op opening night</text>
+    <text x="78" y="1120" text-anchor="end" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">24th &amp; mission · pay-what-you-want</text>
+  </g>
+
+  <g>
+    <circle cx="560" cy="900" r="3" fill="#E94B1F"></circle>
+    <line x1="560" y1="900" x2="780" y2="900" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="784" y="892" font-size="10" font-style="italic" fill="#1A1F24">dogpatch · sat 6/21</text>
+    <text x="784" y="906" font-size="13" fill="#1A1F24" font-weight="600">Floating Points @ The Midway</text>
+    <text x="784" y="920" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">on sale tues 10am · don&#39;t sleep</text>
+  </g>
+
+  <g>
+    <circle cx="560" cy="280" r="3" fill="#E94B1F"></circle>
+    <line x1="560" y1="280" x2="780" y2="240" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="784" y="232" font-size="10" font-style="italic" fill="#1A1F24">north beach · 6/29</text>
+    <text x="784" y="246" font-size="13" fill="#1A1F24" font-weight="600">Beach Blanket revival</text>
+    <text x="784" y="260" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">one night only · Club Fugazi</text>
+  </g>
+
+  <g>
+    <circle cx="430" cy="700" r="3" fill="#E94B1F"></circle>
+    <line x1="430" y1="700" x2="78" y2="630" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="78" y="620" text-anchor="end" font-size="10" font-style="italic" fill="#1A1F24">hayes valley · 6/18</text>
+    <text x="78" y="636" text-anchor="end" font-size="13" fill="#1A1F24" font-weight="600">Highsmith book club</text>
+    <text x="78" y="650" text-anchor="end" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">Smitten Ice Cream · 7 pm sharp</text>
+  </g>
+
+  <g>
+    <circle cx="970" cy="780" r="3" fill="#E94B1F"></circle>
+    <line x1="970" y1="780" x2="1140" y2="780" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="1144" y="772" font-size="10" font-style="italic" fill="#1A1F24">oakland · 6/24</text>
+    <text x="1144" y="786" font-size="13" fill="#1A1F24" font-weight="600">Fox Theater · Yaeji</text>
+    <text x="1144" y="800" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">tickets dropped tuesday</text>
+  </g>
+
+  <g>
+    <circle cx="990" cy="540" r="3" fill="#E94B1F"></circle>
+    <line x1="990" y1="540" x2="1140" y2="540" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="1144" y="532" font-size="10" font-style="italic" fill="#1A1F24">berkeley · 6/15</text>
+    <text x="1144" y="546" font-size="13" fill="#1A1F24" font-weight="600">UC Botanical · solstice walk</text>
+    <text x="1144" y="560" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">free w/ rsvp · 8 pm</text>
+  </g>
+
+  <g>
+    <circle cx="980" cy="950" r="3" fill="#E94B1F"></circle>
+    <line x1="980" y1="950" x2="1140" y2="970" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="1144" y="962" font-size="10" font-style="italic" fill="#1A1F24">alameda · 6/16</text>
+    <text x="1144" y="976" font-size="13" fill="#1A1F24" font-weight="600">Antique faire (1st sun.)</text>
+    <text x="1144" y="990" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">dawn ferry from the city</text>
+  </g>
+
+  <g>
+    <circle cx="260" cy="90" r="3" fill="#E94B1F"></circle>
+    <line x1="260" y1="90" x2="500" y2="60" stroke="#1A1F24" stroke-width="0.5"></line>
+    <text x="500" y="52" font-size="10" font-style="italic" fill="#1A1F24">marin · 6/28</text>
+    <text x="500" y="66" font-size="13" fill="#1A1F24" font-weight="600">Headlands open studios</text>
+    <text x="500" y="80" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.7">28 artists · free shuttle from sausalito</text>
+  </g>
+
+</g>
+
+<g fill="#F1E9D6" font-family="&#39;Fraunces&#39;,Georgia,serif" font-style="italic" opacity="0.55">
+  <text x="200" y="450" font-size="9" letter-spacing="3">RICHMOND</text>
+  <text x="240" y="700" font-size="9" letter-spacing="3">SUNSET</text>
+  <text x="540" y="320" font-size="9" letter-spacing="3">NORTH BCH</text>
+  <text x="500" y="450" font-size="9" letter-spacing="3">PAC HEIGHTS</text>
+  <text x="490" y="640" font-size="9" letter-spacing="3">HAYES</text>
+  <text x="580" y="780" font-size="9" letter-spacing="3">SoMa</text>
+  <text x="540" y="1000" font-size="9" letter-spacing="3">MISSION</text>
+  <text x="600" y="1100" font-size="9" letter-spacing="3">POTRERO</text>
+  <text x="370" y="900" font-size="9" letter-spacing="3">TWIN PKS</text>
+  <text x="220" y="1220" font-size="9" letter-spacing="3">SUNSET S.</text>
+  <text x="960" y="540" font-size="9" letter-spacing="3">BERKELEY</text>
+  <text x="940" y="780" font-size="9" letter-spacing="3">OAKLAND</text>
+  <text x="940" y="970" font-size="9" letter-spacing="3">ALAMEDA</text>
+  <text x="950" y="1120" font-size="9" letter-spacing="3">SAN LEANDRO</text>
+</g>
+
+<text x="800" y="500" font-size="9" font-style="italic" fill="#1A1F24" opacity="0.4" text-anchor="middle" letter-spacing="6" font-family="&#39;Fraunces&#39;,Georgia,serif">SAN  FRANCISCO  BAY · 37°48′N</text>
+
+</svg>
