@@ -32,8 +32,10 @@ export default async function Home() {
         <p className="kicker">
           — THE EVENTS DISPATCH FROM <b>LOCALLYCURATED</b>
         </p>
-        <h1 className="title" style={{ fontSize: "110px" }}>
+        <h1 className="title">
           bay area
+          <br />
+          events
         </h1>
       </section>
       <hr className="rule" />

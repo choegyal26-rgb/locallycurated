@@ -17,9 +17,9 @@
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
-    "drizzle-orm": "^0.38.4",
+    "drizzle-orm": "^0.45.2",
     "leaflet": "^1.9.4",
-    "next": "^16.2.5",
+    "next": "^16.2.6",
     "postgres": "^3.4.5",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -39,5 +39,8 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vercel": "^53.2.0"
+  },
+  "overrides": {
+    "shell-quote": "^1.8.4"
   }
 }

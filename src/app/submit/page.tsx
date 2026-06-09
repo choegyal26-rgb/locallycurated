@@ -14,7 +14,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/submit" },
 };
 
-export default function Submit() {
+export default async function Submit({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) {
+  const { error } = (await searchParams) ?? {};
+
   return (
     <main className="frame">
       <SiteBar
@@ -42,6 +48,12 @@ export default function Submit() {
         method="POST"
         className="rounded-2xl bg-white border border-neutral-200 p-6 sm:p-8 space-y-6 shadow-sm"
       >
+        {error === "invalid" && (
+          <p className="form-error form-error-light">
+            Add the required event details, choose at least one topic, and use a valid email.
+          </p>
+        )}
+
         <div
           aria-hidden="true"
           style={{

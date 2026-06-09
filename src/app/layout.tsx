@@ -27,11 +27,11 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co"
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "LocallyCurated — A Bay Area Field Guide",
+    default: "LocallyCurated | Bay Area Events Newsletter",
     template: "%s · LocallyCurated",
   },
   description:
-    "A biweekly dispatch of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+    "A biweekly Bay Area events newsletter with newly announced concerts, food fests, art shows, meetups, and things to do around San Francisco, Oakland, and the Bay.",
   keywords: [
     "Bay Area events",
     "San Francisco events",
@@ -48,16 +48,16 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: "LocallyCurated",
-    title: "LocallyCurated — A Bay Area Field Guide",
+    title: "LocallyCurated | Bay Area Events Newsletter",
     description:
-      "A biweekly dispatch of newly announced Bay Area concerts, food fests, art shows, meetups, and more — tailored to your taste.",
+      "A biweekly Bay Area events newsletter with newly announced concerts, food fests, art shows, meetups, and things to do around San Francisco, Oakland, and the Bay.",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LocallyCurated — A Bay Area Field Guide",
+    title: "LocallyCurated | Bay Area Events Newsletter",
     description:
-      "A biweekly dispatch of newly announced Bay Area events.",
+      "A biweekly newsletter of newly announced Bay Area events.",
   },
   robots: {
     index: true,
@@ -78,16 +78,32 @@ export default function RootLayout({
 }) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "LocallyCurated",
-    url: SITE_URL,
-    description:
-      "Biweekly dispatch of newly announced Bay Area events: concerts, food fests, art shows, meetups, and more.",
-    areaServed: {
-      "@type": "Place",
-      name: "San Francisco Bay Area",
-    },
-    sameAs: [],
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "LocallyCurated",
+        url: SITE_URL,
+        description:
+          "Biweekly Bay Area events newsletter covering newly announced concerts, food fests, art shows, meetups, and more.",
+        areaServed: {
+          "@type": "Place",
+          name: "San Francisco Bay Area",
+        },
+        sameAs: [],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: "LocallyCurated",
+        alternateName: "Locally Curated",
+        url: SITE_URL,
+        description:
+          "A biweekly Bay Area events newsletter covering newly announced concerts, food fests, art shows, meetups, and things to do.",
+        inLanguage: "en-US",
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+    ],
   };
 
   return (

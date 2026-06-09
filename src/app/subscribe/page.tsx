@@ -34,7 +34,13 @@ const AREA_TAGS: Record<string, string> = {
   "north-bay": "38.08°N",
 };
 
-export default function SubscribePage() {
+export default async function SubscribePage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ error?: string }>;
+}) {
+  const { error } = (await searchParams) ?? {};
+
   return (
     <main className="frame">
       <SiteBar
@@ -56,6 +62,12 @@ export default function SubscribePage() {
       </section>
 
       <form action="/api/subscribe" method="POST" className="card">
+        {error === "invalid" && (
+          <p className="form-error">
+            Add a valid email and pick at least one topic before subscribing.
+          </p>
+        )}
+
         {/* Honeypot — hidden from real users, bots fill it */}
         <div
           aria-hidden="true"
