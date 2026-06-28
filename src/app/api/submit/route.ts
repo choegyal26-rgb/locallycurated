@@ -44,10 +44,9 @@ export async function POST(req: Request) {
     submitterEmail: form.get("submitterEmail"),
   });
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Invalid submission.", details: parsed.error.flatten() },
-      { status: 400 },
-    );
+    const url = new URL("/submit", req.url);
+    url.searchParams.set("error", "invalid");
+    return NextResponse.redirect(url, { status: 303 });
   }
   const v = parsed.data;
 

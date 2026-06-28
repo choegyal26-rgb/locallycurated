@@ -32,10 +32,9 @@ export async function POST(req: Request) {
     areas: asArray(form.getAll("areas")),
   });
   if (!parsed.success) {
-    return NextResponse.json(
-      { error: "Invalid input. Pick at least one topic and a valid email." },
-      { status: 400 },
-    );
+    const url = new URL("/subscribe", req.url);
+    url.searchParams.set("error", "invalid");
+    return NextResponse.redirect(url, { status: 303 });
   }
   const { email, topics, areas } = parsed.data;
 

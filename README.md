@@ -1,4 +1,5 @@
 # LocallyCurated
+Why I built this. I kept finding out about Bay Area shows, conferences, and food events after they'd happened. But the deeper problem isn't logistics it's connection. Sociologists talk about "third places" (cafés, bars, the social in-between). I'm interested in something newer: the fourth placewhere people gather not just by proximity but by shared curiosity. The AI meetup, the warehouse show, the niche art opening. LocallyCurated is the discovery layer for that a biweekly digest of just-announced events, filtered to the topics and neighborhoods you actually care about, so the right people find the right rooms in time.
 
 🌐 **Live at https://locallycurated.co**
 
