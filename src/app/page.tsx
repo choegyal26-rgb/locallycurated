@@ -14,9 +14,8 @@ export default async function Home() {
   const issueNo = currentIssueNumber();
   const dispatch = nextDispatchDate();
   const dispatchLabel = formatDispatchDate(dispatch);
-  // Pull a pool of 15 events; the map cycles through them in a live ticker
-  // (3 visible at once, swap every couple seconds).
-  const pins = await getMapPins(15);
+  // Pull a balanced pool: up to 8 pins per region for the map poster.
+  const pins = await getMapPins(8);
 
   return (
     <main className="frame">
@@ -54,20 +53,7 @@ export default async function Home() {
       </div>
 
       <section className="poster">
-        <PosterMap pins={pins} />
-
-        <div className="corner tl">
-          <b>ISSUE №{issueNo}</b>
-          <i>this week&apos;s lineup</i>
-        </div>
-        <div className="corner tr">
-          <b>LIVE · JUST ANNOUNCED</b>
-          <i>{pins.length} this week</i>
-        </div>
-        <div className="corner br">
-          <b>NEXT DISPATCH · {dispatchLabel.toUpperCase()}</b>
-          <i>↓ subscribe below</i>
-        </div>
+        <PosterMap pins={pins} issueNo={issueNo} dispatchLabel={dispatchLabel} />
 
         <div className="bayQuote q1">
           <small>FROM THE EDITORS</small>

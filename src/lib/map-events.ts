@@ -1,6 +1,6 @@
 import { and, desc, eq, gte, isNull, or, sql as drizzleSql } from "drizzle-orm";
 import { db, events } from "@/lib/db";
-import { findVenueCoords } from "@/lib/venue-coords";
+import { findEventCoords } from "@/lib/venue-coords";
 import { formatShortDate } from "@/lib/issue";
 
 export type MapPin = {
@@ -9,14 +9,21 @@ export type MapPin = {
   meta: string; // e.g. "MISSION · WED 6/11"
   title: string;
   sub: string;
+  url?: string;
 };
+
+const REGION_BOUNDS = {
+  sf: { sw: [37.706, -122.52], ne: [37.82, -122.345] },
+  eastbay: { sw: [37.74, -122.3], ne: [37.91, -122.15] },
+  southbay: { sw: [37.27, -122.05], ne: [37.45, -121.8] },
+} as const;
 
 /**
  * Pull recent approved events that have a venue we can geo-locate,
  * shape them into pins for the homepage map. Ordered by most recently
  * announced first (matches "just announced" framing).
  */
-export async function getMapPins(limit = 8): Promise<MapPin[]> {
+export async function getMapPins(limitPerRegion = 8): Promise<MapPin[]> {
   const since = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
 
   const rows = await db
@@ -24,6 +31,7 @@ export async function getMapPins(limit = 8): Promise<MapPin[]> {
       title: events.title,
       venue: events.venue,
       area: events.area,
+      city: events.city,
       startsAt: events.startsAt,
       url: events.url,
     })
@@ -39,32 +47,72 @@ export async function getMapPins(limit = 8): Promise<MapPin[]> {
       ),
     )
     .orderBy(desc(events.discoveredAt))
-    .limit(60); // fetch more, filter to ones with coord matches
+    .limit(240); // fetch more, then shape into balanced regional buckets
 
-  // Dedupe: at most one pin per venue. Multiple shows at the same
-  // address would stack on top of each other.
   const seenVenues = new Set<string>();
-  const pins: MapPin[] = [];
+  const byRegion: Record<keyof typeof REGION_BOUNDS, MapPin[]> = {
+    sf: [],
+    eastbay: [],
+    southbay: [],
+  };
+
   for (const r of rows) {
-    // Use title+venue as the jitter seed so neighborhood-fallback pins
-    // for different events spread out instead of stacking.
-    const coords = findVenueCoords(r.venue, `${r.title}|${r.venue ?? ""}`);
+    const seed = `${r.title}|${r.venue ?? ""}|${r.city ?? ""}|${r.area ?? ""}`;
+    const coords = findEventCoords({
+      venue: r.venue,
+      city: r.city,
+      area: r.area,
+      jitterSeed: seed,
+    });
     if (!coords) continue;
+
+    const region = regionFor(coords[0], coords[1]);
+    if (!region || byRegion[region].length >= limitPerRegion) continue;
+
     const venueKey = (r.venue ?? "").toLowerCase().trim();
-    if (seenVenues.has(venueKey)) continue;
-    seenVenues.add(venueKey);
+    const dedupeKey = venueKey || `${region}:${r.title.toLowerCase().trim()}`;
+    if (seenVenues.has(dedupeKey)) continue;
+    seenVenues.add(dedupeKey);
 
     const [lat, lng] = coords;
-    const areaLabel = (r.area ?? "BAY AREA").toUpperCase().replace(/-/g, " ");
+    const areaLabel = regionLabel(region);
     const datePart = r.startsAt ? formatShortDate(r.startsAt) : "TBD";
-    pins.push({
+    byRegion[region].push({
       lat,
       lng,
       meta: `${areaLabel} · ${datePart}`,
       title: r.title,
       sub: r.venue ?? "",
+      url: r.url,
     });
-    if (pins.length >= limit) break;
+
+    if (Object.values(byRegion).every((list) => list.length >= limitPerRegion)) {
+      break;
+    }
   }
-  return pins;
+
+  return [...byRegion.sf, ...byRegion.eastbay, ...byRegion.southbay];
+}
+
+function regionFor(lat: number, lng: number): keyof typeof REGION_BOUNDS | null {
+  for (const [id, bounds] of Object.entries(REGION_BOUNDS) as [
+    keyof typeof REGION_BOUNDS,
+    (typeof REGION_BOUNDS)[keyof typeof REGION_BOUNDS],
+  ][]) {
+    if (
+      lat >= bounds.sw[0] &&
+      lat <= bounds.ne[0] &&
+      lng >= bounds.sw[1] &&
+      lng <= bounds.ne[1]
+    ) {
+      return id;
+    }
+  }
+  return null;
+}
+
+function regionLabel(region: keyof typeof REGION_BOUNDS) {
+  if (region === "eastbay") return "EAST BAY";
+  if (region === "southbay") return "SOUTH BAY";
+  return "SF";
 }

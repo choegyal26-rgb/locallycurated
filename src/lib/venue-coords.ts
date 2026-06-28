@@ -68,6 +68,20 @@ export const VENUE_COORDS: VenueEntry[] = [
   { name: "The Greek Theatre", aliases: ["greek theatre"], lat: 37.8736, lng: -122.2542 },
   { name: "Eli's Mile High Club", aliases: ["eli's", "elis mile"], lat: 37.8221, lng: -122.2683 },
   { name: "Sweetwater", aliases: ["sweetwater"], lat: 37.9026, lng: -122.5391 },
+
+  // —— Peninsula / South Bay ——
+  { name: "Shoreline Amphitheatre", aliases: ["shoreline amphitheatre", "shoreline"], lat: 37.4268, lng: -122.0804 },
+  { name: "Computer History Museum", aliases: ["computer history museum"], lat: 37.4143, lng: -122.0774 },
+  { name: "Mountain View Center for the Performing Arts", aliases: ["mountain view center"], lat: 37.3895, lng: -122.0801 },
+  { name: "Castro Street Mountain View", aliases: ["castro street mountain view"], lat: 37.3939, lng: -122.0796 },
+  { name: "Bing Concert Hall", aliases: ["bing concert hall"], lat: 37.4324, lng: -122.1677 },
+  { name: "The Guild Theatre", aliases: ["guild theatre", "guild theater"], lat: 37.4534, lng: -122.1822 },
+  { name: "Palo Alto Art Center", aliases: ["palo alto art center"], lat: 37.4431, lng: -122.1418 },
+  { name: "San Jose Civic", aliases: ["san jose civic"], lat: 37.3308, lng: -121.8887 },
+  { name: "The Ritz San Jose", aliases: ["ritz san jose", "the ritz"], lat: 37.3352, lng: -121.8916 },
+  { name: "SAP Center", aliases: ["sap center"], lat: 37.3328, lng: -121.9012 },
+  { name: "San Jose Museum of Art", aliases: ["san jose museum of art", "sjma"], lat: 37.3337, lng: -121.8899 },
+  { name: "California Theatre", aliases: ["california theatre", "california theater"], lat: 37.3303, lng: -121.8882 },
 ];
 
 /**
@@ -109,7 +123,28 @@ const NEIGHBORHOODS: VenueEntry[] = [
   // East Bay
   { name: "Downtown Oakland", aliases: ["downtown oakland", "oakland"], lat: 37.8044, lng: -122.2712 },
   { name: "Berkeley", aliases: ["berkeley"], lat: 37.8716, lng: -122.273 },
+  { name: "Temescal", aliases: ["temescal"], lat: 37.8377, lng: -122.2637 },
+  { name: "Jack London", aliases: ["jack london"], lat: 37.7951, lng: -122.2776 },
+  { name: "Uptown Oakland", aliases: ["uptown oakland", "uptown"], lat: 37.8098, lng: -122.269 },
+  { name: "Alameda", aliases: ["alameda"], lat: 37.7652, lng: -122.2416 },
+  // Peninsula / South Bay
+  { name: "Mountain View", aliases: ["mountain view"], lat: 37.3861, lng: -122.0839 },
+  { name: "Palo Alto", aliases: ["palo alto"], lat: 37.4419, lng: -122.143 },
+  { name: "Menlo Park", aliases: ["menlo park"], lat: 37.453, lng: -122.1817 },
+  { name: "San Mateo", aliases: ["san mateo"], lat: 37.5629, lng: -122.3255 },
+  { name: "Redwood City", aliases: ["redwood city"], lat: 37.4852, lng: -122.2364 },
+  { name: "Sunnyvale", aliases: ["sunnyvale"], lat: 37.3688, lng: -122.0363 },
+  { name: "Santa Clara", aliases: ["santa clara"], lat: 37.3541, lng: -121.9552 },
+  { name: "San Jose", aliases: ["san jose"], lat: 37.3382, lng: -121.8863 },
 ];
+
+const AREA_CENTROIDS: Record<string, [number, number]> = {
+  sf: [37.7749, -122.4194],
+  "east-bay": [37.8079, -122.2628],
+  peninsula: [37.521, -122.258],
+  "south-bay": [37.3861, -122.0839],
+  "north-bay": [37.9735, -122.5311],
+};
 
 /**
  * Try venue first, fall back to neighborhood centroid. Small jitter
@@ -136,6 +171,25 @@ export function findVenueCoords(
   if (hoodHit) {
     const jitter = jitterFromSeed(jitterSeed ?? venue);
     return [hoodHit.lat + jitter.dLat, hoodHit.lng + jitter.dLng];
+  }
+
+  return null;
+}
+
+export function findEventCoords(opts: {
+  venue: string | null;
+  city?: string | null;
+  area?: string | null;
+  jitterSeed?: string;
+}): [number, number] | null {
+  const haystack = [opts.venue, opts.city, opts.area].filter(Boolean).join(" ");
+  const exact = findVenueCoords(haystack, opts.jitterSeed);
+  if (exact) return exact;
+
+  if (opts.area && AREA_CENTROIDS[opts.area]) {
+    const [lat, lng] = AREA_CENTROIDS[opts.area];
+    const jitter = jitterFromSeed(opts.jitterSeed ?? haystack);
+    return [lat + jitter.dLat * 5, lng + jitter.dLng * 5];
   }
 
   return null;
