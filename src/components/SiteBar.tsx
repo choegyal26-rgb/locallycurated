@@ -21,13 +21,14 @@ export function SiteBar({ issue, variant = "home" }: Props) {
             className="wm-badge"
             src="/wordmark.png"
             alt="Locally Curated"
-            width={240}
-            height={160}
+            width={210}
+            height={140}
             priority
           />
           <span className="wm-stack">
             <span className="tag">
-              <b>A Bay Area</b>Events Dispatch
+              <b>A Bay Area</b>
+              <span>Events Dispatch</span>
             </span>
           </span>
         </Link>
@@ -76,7 +77,7 @@ export function SiteFooter() {
       <span className="colophon">
         Set in Fraunces, Archivo &amp; JetBrains Mono · Printed on the open web
       </span>
-      <span>© MMXXVI · Made for the Bay</span>
+      <span>© MMXXVI</span>
     </footer>
   );
 }
