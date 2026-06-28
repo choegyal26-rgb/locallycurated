@@ -96,7 +96,7 @@ a {
 }
 .wm-badge {
   display: block;
-  width: 240px;
+  width: 210px;
   height: auto;
   user-select: none;
 }
@@ -123,6 +123,10 @@ a {
   display: block;
   color: var(--ink);
   font-weight: 500;
+}
+.wm-stack .tag span {
+  display: block;
+  color: #5b5444;
 }
 .issue {
   font-family: var(--mono);
