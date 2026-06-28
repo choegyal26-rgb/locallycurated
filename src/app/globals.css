@@ -204,9 +204,9 @@ a {
 .masthead h1.title {
   font-family: var(--serif);
   font-weight: 300;
-  font-size: clamp(86px, 13vw, 184px);
-  line-height: 0.88;
-  letter-spacing: -0.055em;
+  font-size: clamp(56px, 8.5vw, 124px);
+  line-height: 0.94;
+  letter-spacing: -0.045em;
   margin: 0;
   position: relative;
 }
