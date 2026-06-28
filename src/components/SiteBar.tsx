@@ -21,8 +21,8 @@ export function SiteBar({ issue, variant = "home" }: Props) {
             className="wm-badge"
             src="/wordmark.png"
             alt="Locally Curated"
-            width={210}
-            height={140}
+            width={356}
+            height={253}
             priority
           />
           <span className="wm-stack">
