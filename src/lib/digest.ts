@@ -1,6 +1,6 @@
 import { and, arrayOverlaps, eq, gte, inArray, isNull, or, sql } from "drizzle-orm";
 import { db, events, subscribers, digestLog } from "@/lib/db";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, unsubscribeHeaders } from "@/lib/email";
 import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -18,8 +18,9 @@ export function buildDigestHTML(opts: {
   events: EventRow[];
   topics: string[];
   unsubscribeUrl: string;
+  preferencesUrl?: string;
 }) {
-  const { events: evs, topics, unsubscribeUrl } = opts;
+  const { events: evs, topics, unsubscribeUrl, preferencesUrl } = opts;
   const grouped = new Map<string, EventRow[]>();
   for (const e of evs) {
     const key = e.area ?? (e.isOnline ? "Online" : "Bay Area");
@@ -62,6 +63,7 @@ export function buildDigestHTML(opts: {
     ${sections}
     <p style="color:#999;font-size:12px;margin-top:32px;border-top:1px solid #eee;padding-top:16px;">
       You're getting this because you subscribed to LocallyCurated.
+      ${preferencesUrl ? `<a href="${escapeAttr(preferencesUrl)}" style="color:#999;">Update your taste</a> ·` : ""}
       <a href="${escapeAttr(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
     </p>
   </div></body></html>`;
@@ -135,16 +137,40 @@ export async function sendBiweeklyDigests(opts: { dryRun?: boolean } = {}) {
     .where(and(eq(subscribers.confirmed, true), isNull(subscribers.unsubscribedAt)));
 
   const since = new Date(Date.now() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000);
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co";
+
+  // Idempotency: anyone already logged as sent within this issue window
+  // is skipped, so a re-fired cron (retry, manual trigger, double
+  // schedule) can never double-send the same issue. 10 days splits the
+  // difference between the 14-day cadence and clock drift.
+  const idempotencyWindow = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000);
+  const recentSends = opts.dryRun
+    ? []
+    : await db
+        .select({ subscriberId: digestLog.subscriberId })
+        .from(digestLog)
+        .where(gte(digestLog.sentAt, idempotencyWindow));
+  const alreadySent = new Set(recentSends.map((r) => r.subscriberId));
 
   const summary: {
     email: string;
     count: number;
     sent: boolean;
+    skipped?: string;
     error?: string;
     id?: string;
   }[] = [];
 
   for (const sub of subs) {
+    if (alreadySent.has(sub.id)) {
+      summary.push({
+        email: sub.email,
+        count: 0,
+        sent: false,
+        skipped: "already-sent-this-issue",
+      });
+      continue;
+    }
     const areaClause =
       sub.areas.length > 0
         ? or(
@@ -178,7 +204,8 @@ export async function sendBiweeklyDigests(opts: { dryRun?: boolean } = {}) {
     const html = buildDigestHTML({
       events: matched,
       topics: sub.topics,
-      unsubscribeUrl: `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/unsubscribe?id=${sub.id}`,
+      unsubscribeUrl: `${siteUrl}/api/unsubscribe?id=${sub.id}`,
+      preferencesUrl: `${siteUrl}/preferences?id=${sub.id}`,
     });
 
     let sendInfo: { sent: boolean; error?: string; id?: string } = {
@@ -189,6 +216,7 @@ export async function sendBiweeklyDigests(opts: { dryRun?: boolean } = {}) {
         to: sub.email,
         subject: `Your Bay Area picks · ${format(new Date(), "MMM d")}`,
         html,
+        headers: unsubscribeHeaders(sub.id),
       });
       if ("sent" in result && result.sent) {
         sendInfo = { sent: true, id: result.id };

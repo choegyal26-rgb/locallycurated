@@ -1,4 +1,4 @@
-import { sendEmail, type EmailResult } from "@/lib/email";
+import { sendEmail, unsubscribeHeaders, type EmailResult } from "@/lib/email";
 
 export const WELCOME_VERSIONS: string[] = [
   // v1
@@ -128,8 +128,9 @@ function escapeHtml(s: string) {
 export function buildWelcomeHTML(opts: {
   version: string;
   unsubscribeUrl: string;
+  preferencesUrl?: string;
 }) {
-  const { version, unsubscribeUrl } = opts;
+  const { version, unsubscribeUrl, preferencesUrl } = opts;
   const [titleLine, ...rest] = version.split("\n\n");
   const bodyParagraphs = rest
     .map(
@@ -144,6 +145,7 @@ export function buildWelcomeHTML(opts: {
     ${bodyParagraphs}
     <p style="color:#999;font-size:12px;margin-top:32px;border-top:1px solid #eee;padding-top:16px;font-family:ui-sans-serif,system-ui,sans-serif;">
       You're getting this because you signed up at locallycurated.co.
+      ${preferencesUrl ? `<a href="${escapeHtml(preferencesUrl)}" style="color:#999;">Update your taste</a> ·` : ""}
       <a href="${escapeHtml(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
     </p>
   </div></body></html>`;
@@ -159,12 +161,17 @@ export async function sendWelcome(opts: {
   subscriberId: string;
 }): Promise<EmailResult & { versionIndex?: number }> {
   const { index, text } = pickWelcomeVersion();
-  const unsubscribeUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/unsubscribe?id=${opts.subscriberId}`;
-  const html = buildWelcomeHTML({ version: text, unsubscribeUrl });
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://locallycurated.co";
+  const html = buildWelcomeHTML({
+    version: text,
+    unsubscribeUrl: `${siteUrl}/api/unsubscribe?id=${opts.subscriberId}`,
+    preferencesUrl: `${siteUrl}/preferences?id=${opts.subscriberId}`,
+  });
   const result = await sendEmail({
     to: opts.to,
     subject: "Welcome to LocallyCurated",
     html,
+    headers: unsubscribeHeaders(opts.subscriberId),
   });
   return { ...result, versionIndex: index };
 }
