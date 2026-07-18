@@ -139,15 +139,24 @@ export function buildWelcomeHTML(opts: {
     )
     .join("");
 
-  return `<!doctype html><html><body style="font-family:ui-serif,Georgia,Cambria,'Times New Roman',Times,serif;background:#fdfaf4;margin:0;padding:24px;">
-  <div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #eee;border-radius:16px;padding:40px;">
-    <h1 style="font-size:22px;margin:0 0 24px 0;font-weight:600;color:#1a1a1a;">${escapeHtml(titleLine.trim())}</h1>
-    ${bodyParagraphs}
-    <p style="color:#999;font-size:12px;margin-top:32px;border-top:1px solid #eee;padding-top:16px;font-family:ui-sans-serif,system-ui,sans-serif;">
-      You're getting this because you signed up at locallycurated.co.
-      ${preferencesUrl ? `<a href="${escapeHtml(preferencesUrl)}" style="color:#999;">Update your taste</a> ·` : ""}
-      <a href="${escapeHtml(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
-    </p>
+  return `<!doctype html><html><body style="background:#F5EFE2;margin:0;padding:28px 16px;">
+  <div style="max-width:600px;margin:0 auto;">
+    <div style="text-align:center;padding-bottom:18px;">
+      <div style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#5b5444;margin-bottom:10px;">&mdash; THE EVENTS DISPATCH &mdash;</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:-1px;color:#15191C;font-weight:bold;">LOCALLY&nbsp;CURATED</div>
+    </div>
+    <div style="background:#F1E7CF;border:1px solid #15191C;padding:36px 32px;">
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;margin:0 0 24px 0;font-weight:normal;font-style:italic;color:#15191C;">${escapeHtml(titleLine.trim())}</h1>
+      <div style="font-family:Georgia,'Times New Roman',serif;">${bodyParagraphs}</div>
+    </div>
+    <div style="text-align:center;padding-top:18px;">
+      <div style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#5b5444;line-height:2;">
+        YOU SIGNED UP AT LOCALLYCURATED.CO<br/>
+        ${preferencesUrl ? `<a href="${escapeHtml(preferencesUrl)}" style="color:#5b5444;">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
+        <a href="${escapeHtml(unsubscribeUrl)}" style="color:#5b5444;">Unsubscribe</a>
+      </div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:12px;color:#3a352c;margin-top:8px;">california &middot; est. mmxxiv</div>
+    </div>
   </div></body></html>`;
 }
 
