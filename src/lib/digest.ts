@@ -1,6 +1,7 @@
 import { and, arrayOverlaps, eq, gte, inArray, isNull, or, sql } from "drizzle-orm";
 import { db, events, subscribers, digestLog } from "@/lib/db";
 import { sendEmail, unsubscribeHeaders } from "@/lib/email";
+import { currentIssueNumber } from "@/lib/issue";
 import { format } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 
@@ -14,6 +15,18 @@ function fmt(d: Date | null) {
   return formatInTimeZone(d, TZ, "EEE, MMM d · h:mm a zzz");
 }
 
+// Field-guide palette — mirrors globals.css. Email clients strip web
+// fonts, so Fraunces → Georgia and JetBrains Mono → Courier fallbacks.
+const PAPER = "#F5EFE2";
+const CARD = "#F1E7CF";
+const INK = "#15191C";
+const INK_SOFT = "#3a352c";
+const MUTED = "#5b5444";
+const ACCENT = "#E94B1F";
+const HAIRLINE = "rgba(21,25,28,0.25)";
+const SERIF = "Georgia,'Times New Roman',serif";
+const MONO = "'Courier New',Courier,monospace";
+
 export function buildDigestHTML(opts: {
   events: EventRow[];
   topics: string[];
@@ -21,6 +34,9 @@ export function buildDigestHTML(opts: {
   preferencesUrl?: string;
 }) {
   const { events: evs, topics, unsubscribeUrl, preferencesUrl } = opts;
+  const issueNo = currentIssueNumber();
+  const issueDate = formatInTimeZone(new Date(), TZ, "EEEE, MMMM d").toUpperCase();
+
   const grouped = new Map<string, EventRow[]>();
   for (const e of evs) {
     const key = e.area ?? (e.isOnline ? "Online" : "Bay Area");
@@ -32,41 +48,74 @@ export function buildDigestHTML(opts: {
   const sections = [...grouped.entries()]
     .map(
       ([area, list]) => `
-        <h2 style="font-size:14px;text-transform:uppercase;letter-spacing:0.05em;color:#666;margin-top:32px;margin-bottom:8px;">${escapeHtml(area)}</h2>
-        ${list
-          .map((e) => {
-            const calUrl = buildGoogleCalendarUrl(e);
-            return `
-              <div style="border-top:1px solid #eee;padding:16px 0;">
-                <a href="${escapeAttr(e.url)}" style="color:#1a1a1a;text-decoration:none;font-size:18px;font-weight:600;">${escapeHtml(e.title)}</a>
-                <div style="color:#666;font-size:13px;margin-top:4px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` · ${escapeHtml(e.venue)}` : ""}</div>
-                ${e.description ? `<p style="color:#444;font-size:14px;line-height:1.5;margin:8px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
-                <div style="margin-top:8px;">
-                  <a href="${escapeAttr(e.url)}" style="display:inline-block;color:#d2603a;font-size:13px;font-weight:500;margin-right:16px;">Details →</a>
+        <div style="margin-top:34px;">
+          <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${ACCENT};font-weight:bold;">
+            &mdash;&nbsp;${escapeHtml(formatAreaName(area))}
+          </div>
+          ${list
+            .map((e) => {
+              const calUrl = buildGoogleCalendarUrl(e);
+              return `
+              <div style="border-top:1px solid ${HAIRLINE};margin-top:12px;padding:16px 0 4px 0;">
+                <a href="${escapeAttr(e.url)}" style="font-family:${SERIF};color:${INK};text-decoration:none;font-size:20px;font-style:italic;line-height:1.25;">${escapeHtml(e.title)}</a>
+                <div style="font-family:${MONO};color:${MUTED};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` &middot; ${escapeHtml(e.venue)}` : ""}</div>
+                ${e.description ? `<p style="font-family:${SERIF};color:${INK_SOFT};font-size:14px;line-height:1.55;margin:10px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
+                <div style="margin-top:10px;padding-bottom:10px;">
+                  <a href="${escapeAttr(e.url)}" style="font-family:${MONO};display:inline-block;color:${ACCENT};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;font-weight:bold;margin-right:18px;">Details &rarr;</a>
                   ${
                     calUrl
-                      ? `<a href="${escapeAttr(calUrl)}" style="display:inline-block;color:#1a73e8;font-size:13px;font-weight:500;">Add to Google Calendar</a>`
+                      ? `<a href="${escapeAttr(calUrl)}" style="font-family:${MONO};display:inline-block;color:${MUTED};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;">+ Calendar</a>`
                       : ""
                   }
                 </div>
               </div>`;
-          })
-          .join("")}
-      `,
+            })
+            .join("")}
+        </div>`,
     )
     .join("");
 
-  return `<!doctype html><html><body style="font-family:ui-sans-serif,system-ui,sans-serif;background:#fdfaf4;margin:0;padding:24px;">
-  <div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #eee;border-radius:16px;padding:32px;">
-    <h1 style="font-size:24px;margin:0 0 8px 0;">LocallyCurated</h1>
-    <p style="color:#666;margin:0 0 8px 0;">${evs.length} new ${evs.length === 1 ? "event" : "events"} announced in the last ${LOOKBACK_DAYS} days, matching: <em>${escapeHtml(topics.join(", "))}</em>.</p>
-    ${sections}
-    <p style="color:#999;font-size:12px;margin-top:32px;border-top:1px solid #eee;padding-top:16px;">
-      You're getting this because you subscribed to LocallyCurated.
-      ${preferencesUrl ? `<a href="${escapeAttr(preferencesUrl)}" style="color:#999;">Update your taste</a> ·` : ""}
-      <a href="${escapeAttr(unsubscribeUrl)}" style="color:#999;">Unsubscribe</a>.
-    </p>
+  return `<!doctype html><html><body style="background:${PAPER};margin:0;padding:28px 16px;">
+  <div style="max-width:600px;margin:0 auto;">
+
+    <!-- masthead -->
+    <div style="text-align:center;padding-bottom:18px;">
+      <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">
+        &mdash; THE EVENTS DISPATCH &mdash;
+      </div>
+      <div style="font-family:${SERIF};font-size:34px;letter-spacing:-1px;color:${INK};font-weight:bold;">
+        LOCALLY&nbsp;CURATED
+      </div>
+      <div style="font-family:${MONO};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${MUTED};margin-top:10px;">
+        ISSUE &#8470;${issueNo} &nbsp;&middot;&nbsp; ${issueDate}
+      </div>
+    </div>
+
+    <!-- card -->
+    <div style="background:${CARD};border:1px solid ${INK};padding:28px 26px 20px 26px;">
+      <div style="border-bottom:1px solid ${INK};padding-bottom:14px;">
+        <span style="font-family:${SERIF};font-style:italic;font-size:17px;color:${INK};line-height:1.5;">${evs.length} ${evs.length === 1 ? "event" : "events"} just announced, matching <em>${escapeHtml(topics.join(", "))}</em>. All upcoming, none past.</span>
+      </div>
+      ${sections}
+    </div>
+
+    <!-- footer -->
+    <div style="text-align:center;padding-top:18px;">
+      <div style="font-family:${MONO};font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${MUTED};line-height:2;">
+        LOCALLYCURATED &middot; A BAY AREA FIELD GUIDE<br/>
+        ${preferencesUrl ? `<a href="${escapeAttr(preferencesUrl)}" style="color:${MUTED};">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
+        <a href="${escapeAttr(unsubscribeUrl)}" style="color:${MUTED};">Unsubscribe</a>
+      </div>
+      <div style="font-family:${SERIF};font-style:italic;font-size:12px;color:${INK_SOFT};margin-top:8px;">
+        california &middot; est. mmxxiv
+      </div>
+    </div>
+
   </div></body></html>`;
+}
+
+function formatAreaName(area: string): string {
+  return area.replace(/-/g, " ");
 }
 
 /**
