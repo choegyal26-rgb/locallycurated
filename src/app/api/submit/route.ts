@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db, events } from "@/lib/db";
 import { TOPIC_IDS, AREA_IDS } from "@/lib/topics";
+import { parseBayAreaLocal } from "@/lib/local-time";
 import {
   notifyAdminOfSubmission,
   sendSubmissionReceipt,
@@ -57,8 +58,8 @@ export async function POST(req: Request) {
       url: v.url,
       venue: v.venue ?? null,
       description: v.description ?? null,
-      startsAt: new Date(v.startsAt),
-      endsAt: v.endsAt ? new Date(v.endsAt) : null,
+      startsAt: parseBayAreaLocal(v.startsAt),
+      endsAt: v.endsAt ? parseBayAreaLocal(v.endsAt) : null,
       topics: v.topics,
       area: v.area ?? null,
       isOnline: v.isOnline,

@@ -135,27 +135,27 @@ export function buildWelcomeHTML(opts: {
   const bodyParagraphs = rest
     .map(
       (p) =>
-        `<p style="color:#1a1a1a;font-size:16px;line-height:1.7;margin:0 0 18px 0;">${escapeHtml(p.trim())}</p>`,
+        `<p style="color:rgba(235,222,212,0.9);font-size:16px;line-height:1.7;margin:0 0 18px 0;">${escapeHtml(p.trim())}</p>`,
     )
     .join("");
 
-  return `<!doctype html><html><body style="background:#F5EFE2;margin:0;padding:28px 16px;">
+  return `<!doctype html><html><body style="background:#EBDED4;margin:0;padding:28px 16px;">
   <div style="max-width:600px;margin:0 auto;">
     <div style="text-align:center;padding-bottom:18px;">
-      <div style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#5b5444;margin-bottom:10px;">&mdash; THE EVENTS DISPATCH &mdash;</div>
-      <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:-1px;color:#15191C;font-weight:bold;">LOCALLY&nbsp;CURATED</div>
+      <div style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#A65E46;margin-bottom:10px;">&mdash; THE EVENTS DISPATCH &mdash;</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;letter-spacing:-1px;color:#02000D;font-weight:bold;">LOCALLY&nbsp;CURATED</div>
     </div>
-    <div style="background:#F1E7CF;border:1px solid #15191C;padding:36px 32px;">
-      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;margin:0 0 24px 0;font-weight:normal;font-style:italic;color:#15191C;">${escapeHtml(titleLine.trim())}</h1>
+    <div style="background:#07203F;border:1px solid #02000D;padding:36px 32px;">
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;margin:0 0 24px 0;font-weight:normal;font-style:italic;color:#EBDED4;">${escapeHtml(titleLine.trim())}</h1>
       <div style="font-family:Georgia,'Times New Roman',serif;">${bodyParagraphs}</div>
     </div>
     <div style="text-align:center;padding-top:18px;">
-      <div style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#5b5444;line-height:2;">
+      <div style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#07203F;line-height:2;">
         YOU SIGNED UP AT LOCALLYCURATED.CO<br/>
-        ${preferencesUrl ? `<a href="${escapeHtml(preferencesUrl)}" style="color:#5b5444;">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
-        <a href="${escapeHtml(unsubscribeUrl)}" style="color:#5b5444;">Unsubscribe</a>
+        ${preferencesUrl ? `<a href="${escapeHtml(preferencesUrl)}" style="color:#07203F;">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
+        <a href="${escapeHtml(unsubscribeUrl)}" style="color:#07203F;">Unsubscribe</a>
       </div>
-      <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:12px;color:#3a352c;margin-top:8px;">california &middot; est. mmxxiv</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:12px;color:#07203F;margin-top:8px;">california &middot; est. mmxxiv</div>
     </div>
   </div></body></html>`;
 }
