@@ -17,13 +17,65 @@ function fmt(d: Date | null) {
 
 // Field-guide palette — mirrors globals.css. Email clients strip web
 // fonts, so Fraunces → Georgia and JetBrains Mono → Courier fallbacks.
-const PAPER = "#F5EFE2";
-const CARD = "#F1E7CF";
-const INK = "#15191C";
-const INK_SOFT = "#3a352c";
-const MUTED = "#5b5444";
-const ACCENT = "#E94B1F";
-const HAIRLINE = "rgba(21,25,28,0.25)";
+export type EmailPalette = {
+  page: string;       // body background
+  card: string;       // card background
+  cardBorder: string;
+  text: string;       // primary text on card
+  textSoft: string;   // descriptions
+  muted: string;      // meta lines on card
+  accent: string;     // area headers, Details →
+  hairline: string;   // per-event rules
+  pageText: string;   // masthead wordmark on page bg
+  pageMuted: string;  // issue line, footer links on page bg
+  pageAccent: string; // masthead kicker on page bg
+};
+
+export const PALETTES: Record<string, EmailPalette> = {
+  // Blue Neutral — deep navy card on warm cream, sand + terracotta accents.
+  blue: {
+    page: "#EBDED4",
+    card: "#07203F",
+    cardBorder: "#02000D",
+    text: "#EBDED4",
+    textSoft: "rgba(235,222,212,0.85)",
+    muted: "rgba(235,222,212,0.6)",
+    accent: "#D9AA90",
+    hairline: "rgba(235,222,212,0.25)",
+    pageText: "#02000D",
+    pageMuted: "#07203F",
+    pageAccent: "#A65E46",
+  },
+  // Dark poster look — matches the site's map poster + form card.
+  ink: {
+    page: "#F5EFE2",
+    card: "#15191C",
+    cardBorder: "#15191C",
+    text: "#F1E7CF",
+    textSoft: "rgba(241,231,207,0.85)",
+    muted: "rgba(241,231,207,0.6)",
+    accent: "#E94B1F",
+    hairline: "rgba(241,231,207,0.25)",
+    pageText: "#15191C",
+    pageMuted: "#5b5444",
+    pageAccent: "#5b5444",
+  },
+  crisp: {
+    page: "#F5EFE2",
+    card: "#FFFFFF",
+    cardBorder: "#15191C",
+    text: "#15191C",
+    textSoft: "#3a352c",
+    muted: "#5b5444",
+    accent: "#E94B1F",
+    hairline: "rgba(21,25,28,0.18)",
+    pageText: "#15191C",
+    pageMuted: "#5b5444",
+    pageAccent: "#5b5444",
+  },
+};
+
+const DEFAULT_PALETTE = PALETTES.blue;
 const SERIF = "Georgia,'Times New Roman',serif";
 const MONO = "'Courier New',Courier,monospace";
 
@@ -32,8 +84,10 @@ export function buildDigestHTML(opts: {
   topics: string[];
   unsubscribeUrl: string;
   preferencesUrl?: string;
+  palette?: EmailPalette;
 }) {
   const { events: evs, topics, unsubscribeUrl, preferencesUrl } = opts;
+  const p = opts.palette ?? DEFAULT_PALETTE;
   const issueNo = currentIssueNumber();
   const issueDate = formatInTimeZone(new Date(), TZ, "EEEE, MMMM d").toUpperCase();
 
@@ -49,22 +103,22 @@ export function buildDigestHTML(opts: {
     .map(
       ([area, list]) => `
         <div style="margin-top:34px;">
-          <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${ACCENT};font-weight:bold;">
+          <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${p.accent};font-weight:bold;">
             &mdash;&nbsp;${escapeHtml(formatAreaName(area))}
           </div>
           ${list
             .map((e) => {
               const calUrl = buildGoogleCalendarUrl(e);
               return `
-              <div style="border-top:1px solid ${HAIRLINE};margin-top:12px;padding:16px 0 4px 0;">
-                <a href="${escapeAttr(e.url)}" style="font-family:${SERIF};color:${INK};text-decoration:none;font-size:20px;font-style:italic;line-height:1.25;">${escapeHtml(e.title)}</a>
-                <div style="font-family:${MONO};color:${MUTED};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` &middot; ${escapeHtml(e.venue)}` : ""}</div>
-                ${e.description ? `<p style="font-family:${SERIF};color:${INK_SOFT};font-size:14px;line-height:1.55;margin:10px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
+              <div style="border-top:1px solid ${p.hairline};margin-top:12px;padding:16px 0 4px 0;">
+                <a href="${escapeAttr(e.url)}" style="font-family:${SERIF};color:${p.text};text-decoration:none;font-size:20px;font-style:italic;line-height:1.25;">${escapeHtml(e.title)}</a>
+                <div style="font-family:${MONO};color:${p.muted};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin-top:6px;">${escapeHtml(fmt(e.startsAt))}${e.venue ? ` &middot; ${escapeHtml(e.venue)}` : ""}</div>
+                ${e.description ? `<p style="font-family:${SERIF};color:${p.textSoft};font-size:14px;line-height:1.55;margin:10px 0 0 0;">${escapeHtml(truncate(e.description, 220))}</p>` : ""}
                 <div style="margin-top:10px;padding-bottom:10px;">
-                  <a href="${escapeAttr(e.url)}" style="font-family:${MONO};display:inline-block;color:${ACCENT};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;font-weight:bold;margin-right:18px;">Details &rarr;</a>
+                  <a href="${escapeAttr(e.url)}" style="font-family:${MONO};display:inline-block;color:${p.accent};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;font-weight:bold;margin-right:18px;">Details &rarr;</a>
                   ${
                     calUrl
-                      ? `<a href="${escapeAttr(calUrl)}" style="font-family:${MONO};display:inline-block;color:${MUTED};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;">+ Calendar</a>`
+                      ? `<a href="${escapeAttr(calUrl)}" style="font-family:${MONO};display:inline-block;color:${p.muted};font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:underline;">+ Calendar</a>`
                       : ""
                   }
                 </div>
@@ -75,38 +129,38 @@ export function buildDigestHTML(opts: {
     )
     .join("");
 
-  return `<!doctype html><html><body style="background:${PAPER};margin:0;padding:28px 16px;">
+  return `<!doctype html><html><body style="background:${p.page};margin:0;padding:28px 16px;">
   <div style="max-width:600px;margin:0 auto;">
 
     <!-- masthead -->
     <div style="text-align:center;padding-bottom:18px;">
-      <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${MUTED};margin-bottom:10px;">
+      <div style="font-family:${MONO};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:${p.pageAccent};margin-bottom:10px;">
         &mdash; THE EVENTS DISPATCH &mdash;
       </div>
-      <div style="font-family:${SERIF};font-size:34px;letter-spacing:-1px;color:${INK};font-weight:bold;">
+      <div style="font-family:${SERIF};font-size:34px;letter-spacing:-1px;color:${p.pageText};font-weight:bold;">
         LOCALLY&nbsp;CURATED
       </div>
-      <div style="font-family:${MONO};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${MUTED};margin-top:10px;">
+      <div style="font-family:${MONO};font-size:11px;letter-spacing:2px;text-transform:uppercase;color:${p.pageMuted};margin-top:10px;">
         ISSUE &#8470;${issueNo} &nbsp;&middot;&nbsp; ${issueDate}
       </div>
     </div>
 
     <!-- card -->
-    <div style="background:${CARD};border:1px solid ${INK};padding:28px 26px 20px 26px;">
-      <div style="border-bottom:1px solid ${INK};padding-bottom:14px;">
-        <span style="font-family:${SERIF};font-style:italic;font-size:17px;color:${INK};line-height:1.5;">${evs.length} ${evs.length === 1 ? "event" : "events"} just announced, matching <em>${escapeHtml(topics.join(", "))}</em>. All upcoming, none past.</span>
+    <div style="background:${p.card};border:1px solid ${p.cardBorder};padding:28px 26px 20px 26px;">
+      <div style="border-bottom:1px solid ${p.hairline};padding-bottom:14px;">
+        <span style="font-family:${SERIF};font-style:italic;font-size:17px;color:${p.text};line-height:1.5;">${evs.length} ${evs.length === 1 ? "event" : "events"} just announced, matching <em>${escapeHtml(topics.join(", "))}</em>. All upcoming, none past.</span>
       </div>
       ${sections}
     </div>
 
     <!-- footer -->
     <div style="text-align:center;padding-top:18px;">
-      <div style="font-family:${MONO};font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${MUTED};line-height:2;">
+      <div style="font-family:${MONO};font-size:10px;letter-spacing:2px;text-transform:uppercase;color:${p.pageMuted};line-height:2;">
         LOCALLYCURATED &middot; A BAY AREA FIELD GUIDE<br/>
-        ${preferencesUrl ? `<a href="${escapeAttr(preferencesUrl)}" style="color:${MUTED};">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
-        <a href="${escapeAttr(unsubscribeUrl)}" style="color:${MUTED};">Unsubscribe</a>
+        ${preferencesUrl ? `<a href="${escapeAttr(preferencesUrl)}" style="color:${p.pageMuted};">Update your taste</a> &nbsp;&middot;&nbsp;` : ""}
+        <a href="${escapeAttr(unsubscribeUrl)}" style="color:${p.pageMuted};">Unsubscribe</a>
       </div>
-      <div style="font-family:${SERIF};font-style:italic;font-size:12px;color:${INK_SOFT};margin-top:8px;">
+      <div style="font-family:${SERIF};font-style:italic;font-size:12px;color:${p.pageMuted};margin-top:8px;">
         california &middot; est. mmxxiv
       </div>
     </div>

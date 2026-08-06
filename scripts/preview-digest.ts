@@ -5,7 +5,7 @@
  */
 import { and, arrayOverlaps, eq, gte, isNull, inArray, or, sql } from "drizzle-orm";
 import { db, events, subscribers } from "../src/lib/db";
-import { buildDigestHTML } from "../src/lib/digest";
+import { buildDigestHTML, PALETTES } from "../src/lib/digest";
 import { sendEmail, unsubscribeHeaders } from "../src/lib/email";
 
 async function main() {
@@ -41,20 +41,26 @@ async function main() {
 
   console.log(`matched ${matched.length} events for ${target}`);
 
-  const html = buildDigestHTML({
-    events: matched,
-    topics: sub.topics,
-    unsubscribeUrl: `${siteUrl}/api/unsubscribe?id=${sub.id}`,
-    preferencesUrl: `${siteUrl}/preferences?id=${sub.id}`,
-  });
+  const variants = [
+    { key: "blue", subject: "[preview] Blue neutral dispatch" },
+  ] as const;
 
-  const result = await sendEmail({
-    to: target,
-    subject: "[preview] Redesigned dispatch — field guide look",
-    html,
-    headers: unsubscribeHeaders(sub.id),
-  });
-  console.log("send:", JSON.stringify(result));
+  for (const v of variants) {
+    const html = buildDigestHTML({
+      events: matched,
+      topics: sub.topics,
+      unsubscribeUrl: `${siteUrl}/api/unsubscribe?id=${sub.id}`,
+      preferencesUrl: `${siteUrl}/preferences?id=${sub.id}`,
+      palette: PALETTES[v.key],
+    });
+    const result = await sendEmail({
+      to: target,
+      subject: v.subject,
+      html,
+      headers: unsubscribeHeaders(sub.id),
+    });
+    console.log(v.key, "→", JSON.stringify(result));
+  }
   process.exit(0);
 }
 
