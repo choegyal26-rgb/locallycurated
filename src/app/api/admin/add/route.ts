@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db, events } from "@/lib/db";
 import { isAdmin } from "@/lib/auth";
 import { TOPIC_IDS, AREA_IDS } from "@/lib/topics";
+import { parseBayAreaLocal } from "@/lib/local-time";
 import { randomUUID } from "node:crypto";
 
 const Schema = z.object({
@@ -34,7 +35,7 @@ export async function POST(req: Request) {
     url: v.url,
     venue: v.venue ?? null,
     area: v.area ?? null,
-    startsAt: new Date(v.startsAt),
+    startsAt: parseBayAreaLocal(v.startsAt),
     description: v.description ?? null,
     topics: v.topics,
     source: "manual",
