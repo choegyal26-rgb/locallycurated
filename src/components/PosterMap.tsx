@@ -26,6 +26,23 @@ const NAV: Record<RegionId, { dir: "right" | "left" | "up" | "down"; to: RegionI
 };
 
 const ARROW = { right: "→", left: "←", up: "↑", down: "↓" } as const;
+
+// CARTO's dark_nolabels tiles require an API key (without one, every tile
+// is an "API KEY REQUIRED" placeholder). With no key configured, fall back
+// to Esri's keyless dark gray base so the poster never renders broken.
+const CARTO_KEY = process.env.NEXT_PUBLIC_CARTO_API_KEY;
+const TILES = CARTO_KEY
+  ? {
+      provider: "carto",
+      url: `https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png?key=${encodeURIComponent(CARTO_KEY)}`,
+      options: { subdomains: "abcd", attribution: "© OpenStreetMap · © CARTO", maxZoom: 19 },
+    }
+  : {
+      provider: "esri",
+      url: "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+      options: { attribution: "Tiles © Esri — Esri, HERE, Garmin, © OpenStreetMap", maxZoom: 16 },
+    };
+
 const VISIBLE_AT_ONCE = 3;
 const ROTATE_MS = 2200;
 
@@ -108,12 +125,7 @@ export default function PosterMap({ pins, issueNo, dispatchLabel }: Props) {
 
     mapRef.current = map;
     map.attributionControl.setPrefix("");
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png", {
-      subdomains: "abcd",
-      attribution: "© OpenStreetMap · © CARTO",
-      maxZoom: 19,
-      minZoom: 10,
-    }).addTo(map);
+    L.tileLayer(TILES.url, { ...TILES.options, minZoom: 10 }).addTo(map);
     map.fitBounds(REGIONS.sf.bounds, { padding: [0, 0] });
 
     const handleResize = () => {
@@ -167,6 +179,7 @@ export default function PosterMap({ pins, issueNo, dispatchLabel }: Props) {
       <div
         id="map"
         ref={mapEl}
+        className={`tiles-${TILES.provider}`}
         role="img"
         aria-label={`${REGIONS[region].name} map with newly announced events`}
         style={{ position: "absolute", inset: 0, background: "var(--ink)" }}
@@ -243,6 +256,9 @@ function resolveLabelCollisions(root: HTMLElement) {
     if (!(label instanceof HTMLElement)) continue;
 
     const r = label.getBoundingClientRect();
+    // Labels are display:none on mobile; their zero rect would read as
+    // off-poster and shove the dot hundreds of pixels down.
+    if (r.width === 0 && r.height === 0) continue;
     const minTop = posterRect.top + gap;
     const maxBottom = posterRect.bottom - gap;
     let best = 0;
@@ -268,7 +284,7 @@ function resolveLabelCollisions(root: HTMLElement) {
 
     if (best !== 0) {
       const x = el.dataset.side === "l" ? "calc(-100% + 5px)" : "-5px";
-      el.style.transform = `translate(${x}, ${-5 + best}px)`;
+      el.style.transform = `translate(${x}, calc(-50% + ${best}px))`;
     }
 
     placed.push(rectFrom(r, best, gap));
