@@ -259,6 +259,10 @@ a {
 .leaflet-tile-pane {
   filter: contrast(1.08) brightness(1.02) sepia(0.35) hue-rotate(-12deg) saturate(0.7);
 }
+/* Esri fallback land is lighter than CARTO Dark Matter; darken to match */
+.tiles-esri .leaflet-tile-pane {
+  filter: contrast(1.1) brightness(0.78) sepia(0.35) hue-rotate(-12deg) saturate(0.7);
+}
 .leaflet-container {
   background: #15191c;
   font-family: var(--mono);
@@ -287,11 +291,14 @@ a {
   gap: 0;
   animation: pin-in 0.45s ease both;
 }
+/* The dot is vertically centered against the label (align-items: center),
+   so anchor at -50% — a fixed -5px drops the dot below its coordinate by
+   half the label's height. */
 .pin.r {
-  transform: translate(-5px, -5px);
+  transform: translate(-5px, -50%);
 }
 .pin.l {
-  transform: translate(calc(-100% + 5px), -5px);
+  transform: translate(calc(-100% + 5px), -50%);
 }
 .pin .dot {
   width: 10px;

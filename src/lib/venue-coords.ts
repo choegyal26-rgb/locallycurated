@@ -62,7 +62,41 @@ export const VENUE_COORDS: VenueEntry[] = [
   // —— Pacific Heights / Marina ——
   { name: "Sports Basement Presidio", aliases: ["sports basement"], lat: 37.7985, lng: -122.4587 },
 
+  // —— More SF music / performance ——
+  { name: "Swedish American Hall", aliases: ["swedish american"], lat: 37.7649, lng: -122.4308 },
+  { name: "El Rio", aliases: ["el rio"], lat: 37.7448, lng: -122.4193 },
+  { name: "Gray Area", aliases: ["gray area", "grey area"], lat: 37.7544, lng: -122.4185 },
+  { name: "ODC Theater", aliases: ["odc theater", "odc theatre"], lat: 37.7637, lng: -122.4158 },
+  { name: "DNA Lounge", aliases: ["dna lounge"], lat: 37.7712, lng: -122.4127 },
+  { name: "The Great Northern", aliases: ["great northern"], lat: 37.7686, lng: -122.4053 },
+  { name: "Thee Parkside", aliases: ["thee parkside"], lat: 37.7651, lng: -122.3994 },
+  { name: "Chase Center", aliases: ["chase center"], lat: 37.768, lng: -122.3877 },
+  { name: "Oracle Park", aliases: ["oracle park"], lat: 37.7786, lng: -122.3893 },
+  { name: "Bill Graham Civic Auditorium", aliases: ["bill graham civic", "civic auditorium"], lat: 37.7785, lng: -122.4177 },
+  { name: "SFJAZZ Center", aliases: ["sfjazz", "sf jazz"], lat: 37.7764, lng: -122.4216 },
+  { name: "Davies Symphony Hall", aliases: ["davies symphony"], lat: 37.7777, lng: -122.4202 },
+  { name: "War Memorial Opera House", aliases: ["war memorial opera", "sf opera house"], lat: 37.7786, lng: -122.4208 },
+  { name: "Orpheum Theatre", aliases: ["orpheum"], lat: 37.7793, lng: -122.4145 },
+  { name: "Golden Gate Theatre", aliases: ["golden gate theatre", "golden gate theater"], lat: 37.7822, lng: -122.4108 },
+  { name: "Curran Theatre", aliases: ["curran theatre", "curran theater"], lat: 37.7869, lng: -122.4109 },
+  { name: "The Masonic", aliases: ["the masonic", "masonic auditorium"], lat: 37.7913, lng: -122.4128 },
+  { name: "Regency Ballroom", aliases: ["regency ballroom"], lat: 37.7873, lng: -122.4222 },
+  { name: "Cobb's Comedy Club", aliases: ["cobb's comedy", "cobbs comedy"], lat: 37.8037, lng: -122.4151 },
+  { name: "Punch Line", aliases: ["punch line comedy", "punchline sf", "punch line sf"], lat: 37.7957, lng: -122.4003 },
+  { name: "Fort Mason Center", aliases: ["fort mason"], lat: 37.8064, lng: -122.431 },
+  { name: "Palace of Fine Arts", aliases: ["palace of fine arts"], lat: 37.802, lng: -122.4484 },
+  { name: "Presidio Theatre", aliases: ["presidio theatre", "presidio theater"], lat: 37.7973, lng: -122.4585 },
+  { name: "California Academy of Sciences", aliases: ["cal academy", "academy of sciences"], lat: 37.7699, lng: -122.4661 },
+  { name: "Golden Gate Bandshell", aliases: ["bandshell", "music concourse"], lat: 37.77, lng: -122.4669 },
+  { name: "SF Botanical Garden", aliases: ["botanical garden"], lat: 37.767, lng: -122.4699 },
+  { name: "4 Star Theater", aliases: ["4 star theater", "four star theater"], lat: 37.7821, lng: -122.4823 },
+
   // —— East Bay ——
+  { name: "Oakland Arena", aliases: ["oakland arena", "oracle arena"], lat: 37.7503, lng: -122.203 },
+  { name: "Paramount Theatre Oakland", aliases: ["paramount theatre", "paramount theater", "paramount oakland"], lat: 37.8086, lng: -122.2685 },
+  { name: "Yoshi's Oakland", aliases: ["yoshi's", "yoshis"], lat: 37.7943, lng: -122.2786 },
+  { name: "UC Theatre", aliases: ["uc theatre", "uc theater"], lat: 37.8719, lng: -122.27 },
+  { name: "Berkeley Rep", aliases: ["berkeley rep", "berkeley repertory"], lat: 37.8702, lng: -122.2703 },
   { name: "Fox Theater Oakland", aliases: ["fox theater", "fox oakland"], lat: 37.8087, lng: -122.2701 },
   { name: "The New Parish", aliases: ["new parish"], lat: 37.8077, lng: -122.2727 },
   { name: "The Greek Theatre", aliases: ["greek theatre"], lat: 37.8736, lng: -122.2542 },
@@ -120,6 +154,28 @@ const NEIGHBORHOODS: VenueEntry[] = [
   { name: "Russian Hill", aliases: ["russian hill"], lat: 37.8014, lng: -122.418 },
   { name: "Telegraph Hill", aliases: ["telegraph hill"], lat: 37.8023, lng: -122.4058 },
   { name: "Twin Peaks", aliases: ["twin peaks"], lat: 37.7544, lng: -122.4477 },
+  { name: "Japantown", aliases: ["japantown"], lat: 37.7852, lng: -122.4297 },
+  { name: "Fillmore District", aliases: ["fillmore district"], lat: 37.7837, lng: -122.433 },
+  { name: "NoPa", aliases: ["nopa", "north panhandle"], lat: 37.7754, lng: -122.4395 },
+  { name: "Alamo Square", aliases: ["alamo square"], lat: 37.7764, lng: -122.4346 },
+  { name: "Cole Valley", aliases: ["cole valley"], lat: 37.7656, lng: -122.4498 },
+  { name: "Duboce Triangle", aliases: ["duboce triangle"], lat: 37.769, lng: -122.433 },
+  { name: "Civic Center", aliases: ["civic center"], lat: 37.7794, lng: -122.4163 },
+  { name: "Union Square", aliases: ["union square"], lat: 37.788, lng: -122.4074 },
+  { name: "South Beach", aliases: ["south beach"], lat: 37.7821, lng: -122.3886 },
+  { name: "Fisherman's Wharf", aliases: ["fisherman's wharf", "fishermans wharf"], lat: 37.808, lng: -122.4177 },
+  { name: "Golden Gate Park", aliases: ["golden gate park"], lat: 37.7694, lng: -122.4762 },
+  { name: "Ocean Beach", aliases: ["ocean beach"], lat: 37.7596, lng: -122.5107 },
+  { name: "Inner Richmond", aliases: ["inner richmond"], lat: 37.78, lng: -122.465 },
+  { name: "Outer Richmond", aliases: ["outer richmond"], lat: 37.778, lng: -122.494 },
+  { name: "Inner Sunset", aliases: ["inner sunset"], lat: 37.7601, lng: -122.4694 },
+  { name: "Outer Sunset", aliases: ["outer sunset"], lat: 37.753, lng: -122.496 },
+  { name: "Parkside", aliases: ["parkside"], lat: 37.7411, lng: -122.4892 },
+  { name: "West Portal", aliases: ["west portal"], lat: 37.7407, lng: -122.466 },
+  { name: "Outer Mission", aliases: ["outer mission"], lat: 37.7232, lng: -122.4451 },
+  { name: "Portola", aliases: ["portola district"], lat: 37.7266, lng: -122.4049 },
+  { name: "Visitacion Valley", aliases: ["visitacion valley"], lat: 37.7136, lng: -122.4046 },
+  { name: "Hunters Point", aliases: ["hunters point", "hunter's point"], lat: 37.729, lng: -122.376 },
   // East Bay
   { name: "Downtown Oakland", aliases: ["downtown oakland", "oakland"], lat: 37.8044, lng: -122.2712 },
   { name: "Berkeley", aliases: ["berkeley"], lat: 37.8716, lng: -122.273 },
@@ -158,22 +214,46 @@ export function findVenueCoords(
   if (!venue) return null;
   const v = venue.toLowerCase();
 
-  // Exact venue match
-  const venueHit = VENUE_COORDS.find(
-    (entry) => entry.aliases.some((a) => v.includes(a)) || v.includes(entry.name.toLowerCase()),
-  );
-  if (venueHit) return [venueHit.lat, venueHit.lng];
+  const venueHit = bestMatch(v, VENUE_COORDS);
+  const hoodHit = bestMatch(v, NEIGHBORHOODS);
 
-  // Neighborhood fallback
-  const hoodHit = NEIGHBORHOODS.find(
-    (entry) => entry.aliases.some((a) => v.includes(a)) || v.includes(entry.name.toLowerCase()),
-  );
+  // Venue beats neighborhood (exact vs. approximate) unless the venue hit
+  // is just a fragment of the district phrase — "Fillmore District" names
+  // the neighborhood, not The Fillmore.
+  if (venueHit && !(hoodHit && hoodHit.alias.includes(venueHit.alias))) {
+    return [venueHit.entry.lat, venueHit.entry.lng];
+  }
   if (hoodHit) {
     const jitter = jitterFromSeed(jitterSeed ?? venue);
-    return [hoodHit.lat + jitter.dLat, hoodHit.lng + jitter.dLng];
+    return [hoodHit.entry.lat + jitter.dLat, hoodHit.entry.lng + jitter.dLng];
   }
 
   return null;
+}
+
+/**
+ * Longest matching alias wins, on word boundaries. Table order used to
+ * decide, so "Mission Bay" landed on "Mission", "Lower Haight" on
+ * "Haight", and "mission" matched inside "Commission".
+ */
+function bestMatch(
+  haystack: string,
+  entries: VenueEntry[],
+): { entry: VenueEntry; alias: string } | null {
+  let best: { entry: VenueEntry; alias: string } | null = null;
+  for (const entry of entries) {
+    for (const alias of [...entry.aliases, entry.name.toLowerCase()]) {
+      if ((!best || alias.length > best.alias.length) && containsWord(haystack, alias)) {
+        best = { entry, alias };
+      }
+    }
+  }
+  return best;
+}
+
+function containsWord(haystack: string, needle: string): boolean {
+  const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(?<![a-z0-9])${escaped}(?![a-z0-9])`).test(haystack);
 }
 
 export function findEventCoords(opts: {

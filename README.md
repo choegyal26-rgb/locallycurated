@@ -92,6 +92,6 @@ Edit [`src/lib/topics.ts`](src/lib/topics.ts) to add categories or Bay Area regi
 ## Deploying to Vercel
 
 1. `vercel link`
-2. Add env vars: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `RESEND_WEBHOOK_SECRET`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`
+2. Add env vars: `DATABASE_URL`, `RESEND_API_KEY`, `RESEND_FROM`, `RESEND_WEBHOOK_SECRET`, `ADMIN_PASSWORD`, `ADMIN_EMAIL`, `CRON_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CARTO_API_KEY` (map tiles; optional — falls back to Esri)
 3. `vercel --prod`
 4. Cron jobs auto-register from `vercel.json`
